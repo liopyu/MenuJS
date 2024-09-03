@@ -12,10 +12,9 @@ public class BasicMenuType<B extends AbstractContainerMenu> {
     }
 
     public MenuType<AbstractMenuContainerJS> get() {
-        var menu = new MenuType<>((pContainerId, pPlayerInventory) ->
+        return new MenuType<>((pContainerId, pPlayerInventory) ->
                 new AbstractMenuContainerJS((AbstractMenuContainerBuilderJS) builder, builder.get(), pContainerId),
                 FeatureFlags.VANILLA_SET);
-        return menu;
 
     }
 
