@@ -3,30 +3,53 @@ package net.liopyu.menujs.menus;
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilderJS;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.OptionalInt;
 
 import static net.liopyu.menujs.util.MenuJSHelperClass.convertObjectToDesired;
-
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class AbstractMenuContainerJS extends AbstractContainerMenu {
     private final AbstractMenuContainerBuilderJS builder;
-    public AbstractMenuContainerJS(AbstractMenuContainerBuilderJS builder, @Nullable MenuType<?> pMenuType, int pContainerId) {
+    private final Inventory playerInventory;
+    public AbstractMenuContainerJS(AbstractMenuContainerBuilderJS builder, @Nullable MenuType<?> pMenuType, int pContainerId, Inventory playerInventory) {
         super(pMenuType, pContainerId);
         this.builder = builder;
+        this.playerInventory = playerInventory;
+        var context = new ContextUtils.MenuBuilderContext<>(builder,pMenuType,pContainerId,playerInventory);
+        builder.onMenuInit.accept(context);
+        for (Slot slot : builder.slotList){
+            this.addSlot(slot);
+        }
+        for (DataSlot slot : builder.dataSlotList){
+            this.addDataSlot(slot);
+        }
+        for (ContainerData slot : builder.containerSlotList){
+            this.addDataSlots(slot);
+        }
+
     }
-    private String menuName(){
+
+    public Inventory getPlayerInventory() {
+        return playerInventory;
+    }
+
+    public String menuName(){
           return this.builder.id.toString();
     }
     @Override
     public ItemStack quickMoveStack(Player player, int i) {
-        if (builder.setQuickMoveStack == null) return null;
+        if (builder.setQuickMoveStack == null) return ItemStack.EMPTY;
         try {
             var context = new ContextUtils.QuickStackContext(player,i,this);
             var obj = convertObjectToDesired(builder.setQuickMoveStack.apply(context), "itemstack");
@@ -37,7 +60,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         }catch (Exception e) {
             MenuJSHelperClass.logErrorMessageOnceCatchable("[MenuJS]: Error in menu builder for field setQuickMoveStack: " + menuName() + ".", e);
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -71,21 +94,6 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
             }
         }
         return super.isValidSlotIndex(pSlotIndex);
-    }
-
-    @Override
-    protected Slot addSlot(Slot pSlot) {
-        return super.addSlot(pSlot);
-    }
-
-    @Override
-    protected DataSlot addDataSlot(DataSlot pIntValue) {
-        return super.addDataSlot(pIntValue);
-    }
-
-    @Override
-    protected void addDataSlots(ContainerData pArray) {
-        super.addDataSlots(pArray);
     }
 
     @Override
