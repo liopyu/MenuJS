@@ -11,6 +11,6 @@ public class AbstractMenuContainerBuilderJS extends AbstractMenuContainerBuilder
     }
     @Override
     public MenuType<AbstractMenuContainerJS> createObject() {
-        return new AbstractMenuTypeJS(this).get();
+        return new AbstractMenuTypeJS<>(this).get();
     }
 }
