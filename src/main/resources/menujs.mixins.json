@@ -1,10 +1,11 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.liopyu.menujs.menujs.mixin",
+  "package": "net.liopyu.menujs.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "MenuJS.refmap.json",
+  "refmap": "menujs.refmap.json",
   "mixins": [
+    "KubeJSCommandsMixin"
   ],
   "client": [
   ],

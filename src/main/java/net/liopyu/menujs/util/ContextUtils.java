@@ -18,6 +18,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class ContextUtils {
+    public static class MenuItemStackContext {
+        public final AbstractContainerMenu menu;
+        public final ItemStack itemStack;
+
+        public MenuItemStackContext(AbstractContainerMenu menu, ItemStack itemStack) {
+            this.menu = menu;
+            this.itemStack = itemStack;
+        }
+    }
     public static class SlotClickContext {
         public final AbstractContainerMenu menu;
         public final int slotId;
@@ -174,6 +183,30 @@ public class ContextUtils {
             this.menu = menu;
             this.index = index;
             this.data = data;
+        }
+    }
+    public static class MenuSlotContext {
+        public final AbstractContainerMenu menu;
+        public final Slot slot;
+
+        public MenuSlotContext(AbstractContainerMenu menu, Slot slot) {
+            this.menu = menu;
+            this.slot = slot;
+        }
+    }
+    public static class TransferStackContext {
+        public final AbstractContainerMenu menu;
+        public final ItemStack stack;
+        public final int startIndex;
+        public final int endIndex;
+        public final boolean reverseDirection;
+
+        public TransferStackContext(AbstractContainerMenu menu, ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
+            this.menu = menu;
+            this.stack = stack;
+            this.startIndex = startIndex;
+            this.endIndex = endIndex;
+            this.reverseDirection = reverseDirection;
         }
     }
 

@@ -189,26 +189,61 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
 
     @Override
     protected boolean moveItemStackTo(ItemStack pStack, int pStartIndex, int pEndIndex, boolean pReverseDirection) {
+        if (builder.moveItemStackTo != null) {
+            try {
+                var context = new ContextUtils.TransferStackContext(this,pStack,pStartIndex,pEndIndex,pReverseDirection);
+                var obj = convertObjectToDesired(builder.moveItemStackTo.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for moveItemStackTo from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.moveItemStackTo(pStack, pStartIndex, pEndIndex, pReverseDirection));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field moveItemStackTo: " + menuName() + ".", e);
+            }
+        }
         return super.moveItemStackTo(pStack, pStartIndex, pEndIndex, pReverseDirection);
     }
 
-    @Override
-    protected void resetQuickCraft() {
-        super.resetQuickCraft();
-    }
 
     @Override
     public boolean canDragTo(Slot pSlot) {
+        if (builder.canDragTo != null) {
+            try {
+                var context = new ContextUtils.MenuSlotContext(this,pSlot);
+                var obj = convertObjectToDesired(builder.canDragTo.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for canDragTo from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.canDragTo(pSlot));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field canDragTo: " + menuName() + ".", e);
+            }
+        }
         return super.canDragTo(pSlot);
+
     }
 
     @Override
     public void setCarried(ItemStack pStack) {
-        super.setCarried(pStack);
+        if (builder.setCarried != null) {
+            var context = new ContextUtils.MenuItemStackContext(this,pStack);
+            consumerCallback(builder.setCarried, context, "[EntityJS]: Error in " + menuName() + "builder for field: setCarried.");
+        }else super.setCarried(pStack);
     }
 
     @Override
     public ItemStack getCarried() {
+        if (builder.getCarried != null) {
+            try {
+                var obj = convertObjectToDesired(builder.getCarried.apply(this), "itemstack");
+                if (obj != null) {
+                    return (ItemStack) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for getCarried from menu: " + menuName() + ". Value: " + obj + ". Must be an ItemStack. Defaulting to super method: " + super.getCarried());
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field getCarried: " + menuName() + ".", e);
+            }
+        }
         return super.getCarried();
     }
 

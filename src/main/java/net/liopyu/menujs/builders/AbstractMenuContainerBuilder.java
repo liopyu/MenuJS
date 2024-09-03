@@ -16,14 +16,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMenu> extends BuilderBase<MenuType<T>> {
-    public transient SimpleContainer container;
     public static List<AbstractMenuContainerBuilder<?>> thisList = new ArrayList<>();
-    public transient Function<ContextUtils.PlayerIndexContext, Object> setQuickMoveStack;
-    public transient Function<ContextUtils.PlayerMenuContext, Object> setStillValid;
-    public transient Function<ContextUtils.IndexContext, Object> isValidSlotIndex;
     public final List<Slot> slotList = new ArrayList<>();
     public final List<ContainerData> containerSlotList = new ArrayList<>();
     public final List<DataSlot> dataSlotList = new ArrayList<>();
+    public transient SimpleContainer container;
+    public transient Function<ContextUtils.PlayerIndexContext, Object> setQuickMoveStack;
+    public transient Function<ContextUtils.PlayerMenuContext, Object> setStillValid;
+    public transient Function<ContextUtils.IndexContext, Object> isValidSlotIndex;
     public transient Consumer<ContextUtils.MenuBuilderContext<T>> onMenuInit;
     public transient Consumer<ContextUtils.ScreenBuilderContext<T>> onScreenInit;
     public transient Consumer<ContextUtils.DataChangedContext<T>> onDataChanged;
@@ -38,10 +38,33 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public transient Consumer<ContextUtils.PlayerMenuContext> setItemRemoved;
     public transient Consumer<ContextUtils.ContainerUpdateContext> onInitializeContents;
     public transient Consumer<ContextUtils.IndexDataContext> onSetData;
+    public transient Function<ContextUtils.TransferStackContext,Object> moveItemStackTo;
+    public transient Function<ContextUtils.MenuSlotContext,Object> canDragTo;
+    public transient Consumer<ContextUtils.MenuItemStackContext> setCarried;
+    public transient Function<T,Object> getCarried;
 
     public AbstractMenuContainerBuilder(ResourceLocation i) {
         super(i);
         thisList.add(this);
+    }
+
+
+
+    public AbstractMenuContainerBuilder<T> getCarried(Function<T,Object> arg) {
+        this.getCarried = arg;
+        return this;
+    }
+    public AbstractMenuContainerBuilder<T> setCarried(Consumer<ContextUtils.MenuItemStackContext> arg) {
+        this.setCarried = arg;
+        return this;
+    }
+    public AbstractMenuContainerBuilder<T> canDragTo(Function<ContextUtils.MenuSlotContext,Object> arg) {
+        this.canDragTo = arg;
+        return this;
+    }
+    public AbstractMenuContainerBuilder<T> moveItemStackTo(Function<ContextUtils.TransferStackContext,Object> arg) {
+        this.moveItemStackTo = arg;
+        return this;
     }
     public AbstractMenuContainerBuilder<T> onSetData(Consumer<ContextUtils.IndexDataContext> arg) {
         this.onSetData = arg;
