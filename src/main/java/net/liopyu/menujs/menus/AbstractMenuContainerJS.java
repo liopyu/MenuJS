@@ -16,6 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.OptionalInt;
 
+import static net.liopyu.menujs.util.MenuJSHelperClass.consumerCallback;
 import static net.liopyu.menujs.util.MenuJSHelperClass.convertObjectToDesired;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -51,7 +52,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
     public ItemStack quickMoveStack(Player player, int i) {
         if (builder.setQuickMoveStack == null) return ItemStack.EMPTY;
         try {
-            var context = new ContextUtils.QuickStackContext(player,i,this);
+            var context = new ContextUtils.PlayerIndexContext(player,i,this);
             var obj = convertObjectToDesired(builder.setQuickMoveStack.apply(context), "itemstack");
             if (obj != null) {
                 return (ItemStack) obj;
@@ -95,66 +96,32 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         }
         return super.isValidSlotIndex(pSlotIndex);
     }
-
-
-    @Override
-    public void setSynchronizer(ContainerSynchronizer pSynchronizer) {
-        super.setSynchronizer(pSynchronizer);
-    }
-
-    @Override
-    public void sendAllDataToRemote() {
-        super.sendAllDataToRemote();
-    }
-
-    @Override
-    public void removeSlotListener(ContainerListener pListener) {
-        super.removeSlotListener(pListener);
-    }
-
-    @Override
-    public NonNullList<ItemStack> getItems() {
-        return super.getItems();
-    }
-
-    @Override
-    public void broadcastChanges() {
-        super.broadcastChanges();
-    }
-
-    @Override
-    public void broadcastFullState() {
-        super.broadcastFullState();
-    }
-
-    @Override
-    public void setRemoteSlot(int pSlot, ItemStack pStack) {
-        super.setRemoteSlot(pSlot, pStack);
-    }
-
-    @Override
-    public void setRemoteSlotNoCopy(int pSlot, ItemStack pStack) {
-        super.setRemoteSlotNoCopy(pSlot, pStack);
-    }
-
-    @Override
-    public void setRemoteCarried(ItemStack pRemoteCarried) {
-        super.setRemoteCarried(pRemoteCarried);
-    }
+   
 
     @Override
     public boolean clickMenuButton(Player pPlayer, int pId) {
-        return super.clickMenuButton(pPlayer, pId);
+        if (builder.clickMenuButton != null) {
+            try {
+                var context = new ContextUtils.PlayerIndexContext(pPlayer,pId,this);
+                var obj = convertObjectToDesired(builder.clickMenuButton.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for clickMenuButton from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.clickMenuButton(pPlayer,pId));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field clickMenuButton: " + menuName() + ".", e);
+            }
+        }
+        return super.clickMenuButton(pPlayer,pId);
     }
 
-    @Override
-    public Slot getSlot(int pSlotId) {
-        return super.getSlot(pSlotId);
-    }
 
     @Override
     public void clicked(int pSlotId, int pButton, ClickType pClickType, Player pPlayer) {
-        super.clicked(pSlotId, pButton, pClickType, pPlayer);
+        if (builder.onClicked != null) {
+            final ContextUtils.SlotClickContext context = new ContextUtils.SlotClickContext(this,pSlotId,pButton,pClickType,pPlayer);
+            consumerCallback(builder.onClicked, context, "[EntityJS]: Error in " + menuName() + "builder for field: onClicked.");
+        }else super.clicked(pSlotId, pButton, pClickType, pPlayer);
     }
 
     @Override

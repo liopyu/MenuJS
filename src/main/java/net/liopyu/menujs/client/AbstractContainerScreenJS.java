@@ -15,6 +15,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static net.liopyu.menujs.util.MenuJSHelperClass.consumerCallback;
+
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @OnlyIn(Dist.CLIENT)
@@ -38,24 +40,37 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
         super.init();
         var context = new ContextUtils.ScreenBuilderContext<>(this,builder,getMenu(),getPlayerInventory(),getTitle());
         builder.onScreenInit.accept(context);
+        this.menu.addSlotListener(this);
     }
 
     public void removed() {
         super.removed();
         this.menu.removeSlotListener(this);
     }
+    public String menuName(){
+        return this.builder.id.toString();
+    }
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
-
+        if (builder.renderBg != null) {
+            final ContextUtils.ScreenRenderContext<T> context = new ContextUtils.ScreenRenderContext<>(this,guiGraphics,v,i,i1);
+            consumerCallback(builder.renderBg, context, "[EntityJS]: Error in " + menuName() + "builder for field: renderBg.");
+        }
     }
 
     @Override
     public void slotChanged(AbstractContainerMenu abstractContainerMenu, int i, ItemStack itemStack) {
-
+        if (builder.onSlotChanged != null) {
+            final ContextUtils.MenuItemContext<T> context = new ContextUtils.MenuItemContext<>(this,getMenu(),i,itemStack);
+            consumerCallback(builder.onSlotChanged, context, "[EntityJS]: Error in " + menuName() + "builder for field: onSlotChanged.");
+        }
     }
 
     @Override
     public void dataChanged(AbstractContainerMenu abstractContainerMenu, int i, int i1) {
-
+        if (builder.onDataChanged != null) {
+            final ContextUtils.DataChangedContext<T> context = new ContextUtils.DataChangedContext<>(getMenu(),this,i,i1);
+            consumerCallback(builder.onDataChanged, context, "[EntityJS]: Error in " + menuName() + "builder for field: onDataChanged.");
+        }
     }
 }
