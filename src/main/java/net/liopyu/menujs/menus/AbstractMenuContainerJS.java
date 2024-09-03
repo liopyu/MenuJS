@@ -4,7 +4,6 @@ import net.liopyu.menujs.builders.AbstractMenuContainerBuilderJS;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.OptionalInt;
 
 import static net.liopyu.menujs.util.MenuJSHelperClass.consumerCallback;
 import static net.liopyu.menujs.util.MenuJSHelperClass.convertObjectToDesired;
@@ -27,6 +25,8 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         super(pMenuType, pContainerId);
         this.builder = builder;
         this.playerInventory = playerInventory;
+        builder.setPlayerInventory(playerInventory);
+
         var context = new ContextUtils.MenuBuilderContext<>(builder,pMenuType,pContainerId,playerInventory);
         builder.onMenuInit.accept(context);
         for (Slot slot : builder.slotList){
@@ -40,7 +40,6 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         }
 
     }
-
     public Inventory getPlayerInventory() {
         return playerInventory;
     }
@@ -245,35 +244,5 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
             }
         }
         return super.getCarried();
-    }
-
-    @Override
-    public void suppressRemoteUpdates() {
-        super.suppressRemoteUpdates();
-    }
-
-    @Override
-    public void resumeRemoteUpdates() {
-        super.resumeRemoteUpdates();
-    }
-
-    @Override
-    public void transferState(AbstractContainerMenu pMenu) {
-        super.transferState(pMenu);
-    }
-
-    @Override
-    public OptionalInt findSlot(Container pContainer, int pSlotIndex) {
-        return super.findSlot(pContainer, pSlotIndex);
-    }
-
-    @Override
-    public int getStateId() {
-        return super.getStateId();
-    }
-
-    @Override
-    public int incrementStateId() {
-        return super.incrementStateId();
     }
 }

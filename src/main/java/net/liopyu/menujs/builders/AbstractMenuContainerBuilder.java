@@ -4,9 +4,11 @@ import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.liopyu.menujs.util.ContextUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 
@@ -16,6 +18,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMenu> extends BuilderBase<MenuType<T>> {
+    private T menu;
     public static List<AbstractMenuContainerBuilder<?>> thisList = new ArrayList<>();
     public final List<Slot> slotList = new ArrayList<>();
     public final List<ContainerData> containerSlotList = new ArrayList<>();
@@ -42,13 +45,24 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public transient Function<ContextUtils.MenuSlotContext,Object> canDragTo;
     public transient Consumer<ContextUtils.MenuItemStackContext> setCarried;
     public transient Function<T,Object> getCarried;
+    public transient Inventory playerInventory;
 
     public AbstractMenuContainerBuilder(ResourceLocation i) {
         super(i);
         thisList.add(this);
     }
 
+    public T getMenu() {
+        return menu;
+    }
 
+    public Inventory getPlayerInventory() {
+        return playerInventory;
+    }
+
+    public void setPlayerInventory(Inventory playerInventory) {
+        this.playerInventory = playerInventory;
+    }
 
     public AbstractMenuContainerBuilder<T> getCarried(Function<T,Object> arg) {
         this.getCarried = arg;
