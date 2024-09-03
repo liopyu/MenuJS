@@ -3,6 +3,7 @@ package net.liopyu.menujs.client;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import net.liopyu.menujs.MenuJS;
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
+import net.liopyu.menujs.client.container.AbstractContainerScreenJS;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.api.distmarker.Dist;

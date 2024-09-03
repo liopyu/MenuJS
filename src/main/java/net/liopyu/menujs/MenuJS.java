@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 
 @Mod(MenuJS.MODID)
 public class MenuJS {
-    public static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static final String MODID = "menujs";
 
     public MenuJS() {

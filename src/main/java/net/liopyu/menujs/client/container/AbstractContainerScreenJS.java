@@ -1,4 +1,4 @@
-package net.liopyu.menujs.client;
+package net.liopyu.menujs.client.container;
 
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
 import net.liopyu.menujs.util.ContextUtils;

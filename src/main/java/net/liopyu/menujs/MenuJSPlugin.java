@@ -2,7 +2,7 @@ package net.liopyu.menujs;
 
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
-import net.liopyu.menujs.builders.AbstractMenuContainerBuilderJS;
+import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
 
 public class MenuJSPlugin extends KubeJSPlugin {
     @Override

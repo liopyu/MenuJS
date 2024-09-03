@@ -1,6 +1,6 @@
-package net.liopyu.menujs.menus;
+package net.liopyu.menujs.menus.container;
 
-import net.liopyu.menujs.builders.AbstractMenuContainerBuilderJS;
+import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.MethodsReturnNonnullByDefault;

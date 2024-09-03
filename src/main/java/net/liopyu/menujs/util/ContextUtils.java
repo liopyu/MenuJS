@@ -1,7 +1,6 @@
 package net.liopyu.menujs.util;
 
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
-import net.liopyu.menujs.builders.AbstractMenuContainerBuilderJS;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
