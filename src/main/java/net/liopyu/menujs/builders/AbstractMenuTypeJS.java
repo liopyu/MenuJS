@@ -5,9 +5,9 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 
-public class BasicMenuType<B extends AbstractContainerMenu> {
+public class AbstractMenuTypeJS<B extends AbstractContainerMenu> {
     private final AbstractMenuContainerBuilder<?> builder;
-    public <T extends AbstractMenuContainerBuilder<B>> BasicMenuType(T builder) {
+    public <T extends AbstractMenuContainerBuilder<B>> AbstractMenuTypeJS(T builder) {
     this.builder = builder;
     }
     public MenuType<AbstractMenuContainerJS> get() {

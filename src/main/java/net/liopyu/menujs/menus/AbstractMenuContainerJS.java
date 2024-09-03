@@ -68,7 +68,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         if (builder.setStillValid == null) return false;
         try {
-            var context = new ContextUtils.StillValidContext(player,this);
+            var context = new ContextUtils.PlayerMenuContext(player,this);
             var obj = convertObjectToDesired(builder.setStillValid.apply(context), "boolean");
             if (obj != null) {
                 return (boolean) obj;
@@ -126,37 +126,65 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
 
     @Override
     public boolean canTakeItemForPickAll(ItemStack pStack, Slot pSlot) {
+        if (builder.setCanTakeItemForPickAll != null) {
+            try {
+                var context = new ContextUtils.ItemSlotContext(this,pStack,pSlot);
+                var obj = convertObjectToDesired(builder.setCanTakeItemForPickAll.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for setCanTakeItemForPickAll from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.canTakeItemForPickAll(pStack, pSlot));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field setCanTakeItemForPickAll: " + menuName() + ".", e);
+            }
+        }
         return super.canTakeItemForPickAll(pStack, pSlot);
     }
 
     @Override
     public void removed(Player pPlayer) {
-        super.removed(pPlayer);
+        if (builder.onItemRemoved != null) {
+            var context = new ContextUtils.PlayerMenuContext(pPlayer,this);
+            consumerCallback(builder.onItemRemoved, context, "[EntityJS]: Error in " + menuName() + "builder for field: onItemRemoved.");
+        }
+        if (builder.setItemRemoved != null) {
+            var context = new ContextUtils.PlayerMenuContext(pPlayer,this);
+            consumerCallback(builder.setItemRemoved, context, "[EntityJS]: Error in " + menuName() + "builder for field: setItemRemoved.");
+        }else super.removed(pPlayer);
     }
 
-    @Override
-    protected void clearContainer(Player pPlayer, Container pContainer) {
-        super.clearContainer(pPlayer, pContainer);
-    }
+
 
     @Override
     public void slotsChanged(Container pContainer) {
-        super.slotsChanged(pContainer);
+        if (builder.onMenuSlotChanged != null) {
+            var context = new ContextUtils.ContainerMenuContext(this,pContainer);
+            consumerCallback(builder.onMenuSlotChanged, context, "[EntityJS]: Error in " + menuName() + "builder for field: onMenuSlotChanged.");
+        }
+        if (builder.setMenuSlotChanged != null) {
+            var context = new ContextUtils.ContainerMenuContext(this,pContainer);
+            consumerCallback(builder.setMenuSlotChanged, context, "[EntityJS]: Error in " + menuName() + "builder for field: setMenuSlotChanged.");
+        }else super.slotsChanged(pContainer);
     }
 
-    @Override
-    public void setItem(int pSlotId, int pStateId, ItemStack pStack) {
-        super.setItem(pSlotId, pStateId, pStack);
-    }
+
 
     @Override
     public void initializeContents(int pStateId, List<ItemStack> pItems, ItemStack pCarried) {
         super.initializeContents(pStateId, pItems, pCarried);
+        if (builder.onInitializeContents != null) {
+            var context = new ContextUtils.ContainerUpdateContext(this,pStateId,pItems,pCarried);
+            consumerCallback(builder.onInitializeContents, context, "[EntityJS]: Error in " + menuName() + "builder for field: onInitializeContents.");
+        }
     }
 
     @Override
     public void setData(int pId, int pData) {
         super.setData(pId, pData);
+        if (builder.onSetData != null) {
+            var context = new ContextUtils.IndexDataContext(this,pId,pData);
+            consumerCallback(builder.onSetData, context, "[EntityJS]: Error in " + menuName() + "builder for field: onSetData.");
+        }
     }
 
     @Override

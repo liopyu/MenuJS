@@ -60,9 +60,9 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
 
     @Override
     public void slotChanged(AbstractContainerMenu abstractContainerMenu, int i, ItemStack itemStack) {
-        if (builder.onSlotChanged != null) {
+        if (builder.onScreenSlotChanged != null) {
             final ContextUtils.MenuItemContext<T> context = new ContextUtils.MenuItemContext<>(this,getMenu(),i,itemStack);
-            consumerCallback(builder.onSlotChanged, context, "[EntityJS]: Error in " + menuName() + "builder for field: onSlotChanged.");
+            consumerCallback(builder.onScreenSlotChanged, context, "[EntityJS]: Error in " + menuName() + "builder for field: onScreenSlotChanged.");
         }
     }
 

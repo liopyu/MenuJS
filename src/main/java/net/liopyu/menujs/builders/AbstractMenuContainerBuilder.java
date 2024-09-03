@@ -19,7 +19,7 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public transient SimpleContainer container;
     public static List<AbstractMenuContainerBuilder<?>> thisList = new ArrayList<>();
     public transient Function<ContextUtils.PlayerIndexContext, Object> setQuickMoveStack;
-    public transient Function<ContextUtils.StillValidContext, Object> setStillValid;
+    public transient Function<ContextUtils.PlayerMenuContext, Object> setStillValid;
     public transient Function<ContextUtils.IndexContext, Object> isValidSlotIndex;
     public final List<Slot> slotList = new ArrayList<>();
     public final List<ContainerData> containerSlotList = new ArrayList<>();
@@ -27,14 +27,49 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public transient Consumer<ContextUtils.MenuBuilderContext<T>> onMenuInit;
     public transient Consumer<ContextUtils.ScreenBuilderContext<T>> onScreenInit;
     public transient Consumer<ContextUtils.DataChangedContext<T>> onDataChanged;
-    public transient Consumer<ContextUtils.MenuItemContext<T>> onSlotChanged;
+    public transient Consumer<ContextUtils.MenuItemContext<T>> onScreenSlotChanged;
+    public transient Consumer<ContextUtils.ContainerMenuContext> onMenuSlotChanged;
+    public transient Consumer<ContextUtils.ContainerMenuContext> setMenuSlotChanged;
     public transient Consumer<ContextUtils.ScreenRenderContext<T>> renderBg;
     public transient Function<ContextUtils.PlayerIndexContext,Object> clickMenuButton;
     public transient Consumer<ContextUtils.SlotClickContext> onClicked;
+    public transient Function<ContextUtils.ItemSlotContext,Object> setCanTakeItemForPickAll;
+    public transient Consumer<ContextUtils.PlayerMenuContext> onItemRemoved;
+    public transient Consumer<ContextUtils.PlayerMenuContext> setItemRemoved;
+    public transient Consumer<ContextUtils.ContainerUpdateContext> onInitializeContents;
+    public transient Consumer<ContextUtils.IndexDataContext> onSetData;
 
     public AbstractMenuContainerBuilder(ResourceLocation i) {
         super(i);
         thisList.add(this);
+    }
+    public AbstractMenuContainerBuilder<T> onSetData(Consumer<ContextUtils.IndexDataContext> arg) {
+        this.onSetData = arg;
+        return this;
+    }
+    public AbstractMenuContainerBuilder<T> onInitializeContents(Consumer<ContextUtils.ContainerUpdateContext> arg) {
+        this.onInitializeContents = arg;
+        return this;
+    }
+    public AbstractMenuContainerBuilder<T> setMenuSlotChanged(Consumer<ContextUtils.ContainerMenuContext> arg) {
+        this.setMenuSlotChanged = arg;
+        return this;
+    }
+    public AbstractMenuContainerBuilder<T> onMenuSlotChanged(Consumer<ContextUtils.ContainerMenuContext> arg) {
+        this.onMenuSlotChanged = arg;
+        return this;
+    }
+    public AbstractMenuContainerBuilder<T> setItemRemoved(Consumer<ContextUtils.PlayerMenuContext> arg) {
+        this.setItemRemoved = arg;
+        return this;
+    }
+    public AbstractMenuContainerBuilder<T> onItemRemoved(Consumer<ContextUtils.PlayerMenuContext> arg) {
+        this.onItemRemoved = arg;
+        return this;
+    }
+    public AbstractMenuContainerBuilder<T> setCanTakeItemForPickAll(Function<ContextUtils.ItemSlotContext,Object> arg) {
+        this.setCanTakeItemForPickAll = arg;
+        return this;
     }
     public AbstractMenuContainerBuilder<T> onClicked(Consumer<ContextUtils.SlotClickContext> consumer) {
         this.onClicked = consumer;
@@ -48,8 +83,8 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         this.renderBg = consumer;
         return this;
     }
-    public AbstractMenuContainerBuilder<T> onSlotChanged(Consumer<ContextUtils.MenuItemContext<T>> consumer) {
-        this.onSlotChanged = consumer;
+    public AbstractMenuContainerBuilder<T> onScreenSlotChanged(Consumer<ContextUtils.MenuItemContext<T>> consumer) {
+        this.onScreenSlotChanged = consumer;
         return this;
     }
     public AbstractMenuContainerBuilder<T> onDataChanged(Consumer<ContextUtils.DataChangedContext<T>> consumer) {
@@ -95,7 +130,7 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         this.isValidSlotIndex = function;
         return this;
     }
-    public AbstractMenuContainerBuilder<T> setStillValid(Function<ContextUtils.StillValidContext, Object> function) {
+    public AbstractMenuContainerBuilder<T> setStillValid(Function<ContextUtils.PlayerMenuContext, Object> function) {
         this.setStillValid = function;
         return this;
     }

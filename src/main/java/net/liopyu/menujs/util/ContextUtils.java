@@ -5,13 +5,17 @@ import net.liopyu.menujs.builders.AbstractMenuContainerBuilderJS;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class ContextUtils {
     public static class SlotClickContext {
@@ -40,11 +44,20 @@ public class ContextUtils {
             this.menu = menu;
         }
     }
-    public static class StillValidContext{
+    public static class ContainerMenuContext{
+        public final AbstractContainerMenu menu;
+        public final Container container;
+
+        public ContainerMenuContext(AbstractContainerMenu menu, Container container) {
+            this.menu = menu;
+            this.container = container;
+        }
+    }
+    public static class PlayerMenuContext{
         public final Player player;
         public final AbstractContainerMenu menu;
 
-        public StillValidContext(Player player, AbstractContainerMenu menu) {
+        public PlayerMenuContext(Player player, AbstractContainerMenu menu) {
             this.player = player;
             this.menu = menu;
         }
@@ -115,6 +128,17 @@ public class ContextUtils {
             this.itemStack = itemStack;
         }
     }
+    public static class ItemSlotContext {
+        public final AbstractContainerMenu menu;
+        public final ItemStack item;
+        public final Slot slot;
+
+        public ItemSlotContext(AbstractContainerMenu menu, ItemStack item, Slot slot) {
+            this.menu = menu;
+            this.item = item;
+            this.slot = slot;
+        }
+    }
     public static class DataChangedContext<T extends AbstractContainerMenu> {
         public final T menu;
         public final AbstractContainerScreen<T> screen;
@@ -128,7 +152,30 @@ public class ContextUtils {
             this.dataValue = dataValue;
         }
     }
+    public static class ContainerUpdateContext {
+        public final AbstractContainerMenu menu;
+        public final int stateId;
+        public final List<ItemStack> items;
+        public final ItemStack carried;
 
+        public ContainerUpdateContext(AbstractContainerMenu menu, int stateId, List<ItemStack> items, ItemStack carried) {
+            this.menu = menu;
+            this.stateId = stateId;
+            this.items = items;
+            this.carried = carried;
+        }
+    }
+    public static class IndexDataContext {
+        public final AbstractContainerMenu menu;
+        public final int index;
+        public final int data;
+
+        public IndexDataContext(AbstractContainerMenu menu, int index, int data) {
+            this.menu = menu;
+            this.index = index;
+            this.data = data;
+        }
+    }
 
 
 }
