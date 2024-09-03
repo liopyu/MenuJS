@@ -1,5 +1,6 @@
 package net.liopyu.menujs.util;
 
+import dev.latvian.mods.kubejs.util.ConsoleJS;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
@@ -9,7 +10,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
-import static net.liopyu.menujs.MenuJS.LOGGER;
 public class MenuJSHelperClass {
     public static final Set<String> errorMessagesLogged = new HashSet<>();
     public static final Set<String> warningMessagesLogged = new HashSet<>();
@@ -17,65 +17,65 @@ public class MenuJSHelperClass {
 
     public static void logErrorMessageOnce(String errorMessage) {
         if (!errorMessagesLogged.contains(errorMessage)) {
-            LOGGER.error("[Dynamic Structures]: " + errorMessage);
+            ConsoleJS.STARTUP.error("[MenuJS]: " + errorMessage);
             errorMessagesLogged.add(errorMessage);
         }
     }
 
     public static void logErrorMessage(String errorMessage) {
-        LOGGER.error("[Dynamic Structures]: " + errorMessage);
+        ConsoleJS.STARTUP.error("[MenuJS]: " + errorMessage);
     }
 
     public static void logWarningMessageOnce(String errorMessage) {
         if (!warningMessagesLogged.contains(errorMessage)) {
-            LOGGER.warn("[Dynamic Structures]: " + errorMessage);
+            ConsoleJS.STARTUP.warn("[MenuJS]: " + errorMessage);
             warningMessagesLogged.add(errorMessage);
         }
     }
 
     public static void logWarningMessageOnceDev(String errorMessage) {
         if (!FMLEnvironment.production && !warningMessagesLogged.contains(errorMessage)) {
-            LOGGER.warn("[Dynamic Structures]: " + errorMessage);
+            ConsoleJS.STARTUP.warn("[MenuJS]: " + errorMessage);
             warningMessagesLogged.add(errorMessage);
         }
     }
 
     public static void logWarningMessage(String errorMessage) {
-        LOGGER.warn("[Dynamic Structures]: " + errorMessage);
+        ConsoleJS.STARTUP.warn("[MenuJS]: " + errorMessage);
     }
 
     public static void logErrorMessageCatchable(String errorMessage, Throwable e) {
-        LOGGER.error("[Dynamic Structures]: " + errorMessage, e);
+        ConsoleJS.STARTUP.error("[MenuJS]: " + errorMessage, e);
     }
 
     public static void logErrorMessageOnceCatchable(String errorMessage, Throwable e) {
         if (!errorMessagesLogged.contains(errorMessage)) {
-            LOGGER.error("[Dynamic Structures]: " + errorMessage, e);
+            ConsoleJS.STARTUP.error("[MenuJS]: " + errorMessage, e);
             errorMessagesLogged.add(errorMessage);
         }
     }
 
     public static void logInfoMessageOnce(String info) {
         if (!infoMessagesLogged.contains(info)) {
-            LOGGER.info("[Dynamic Structures]: " + info);
+            ConsoleJS.STARTUP.info("[MenuJS]: " + info);
             infoMessagesLogged.add(info);
         }
     }
 
     public static void logInfoMessageOnceDev(String info) {
         if (!FMLEnvironment.production && !infoMessagesLogged.contains(info)) {
-            LOGGER.info("[Dynamic Structures]: " + info);
+            ConsoleJS.STARTUP.info("[MenuJS]: " + info);
             infoMessagesLogged.add(info);
         }
     }
 
     public static void logInfoMessage(String info) {
-        LOGGER.info("[Dynamic Structures]: " + info);
+        ConsoleJS.STARTUP.info("[MenuJS]: " + info);
     }
 
     public static void logInfoMessageDev(String info) {
         if (!FMLEnvironment.production) {
-            LOGGER.info("[Dynamic Structures]: " + info);
+            ConsoleJS.STARTUP.info("[MenuJS]: " + info);
         }
     }
 

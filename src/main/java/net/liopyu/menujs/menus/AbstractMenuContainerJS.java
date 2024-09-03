@@ -56,9 +56,9 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
             if (obj != null) {
                 return (ItemStack) obj;
             }
-            MenuJSHelperClass.logErrorMessageOnce("[MenuJS]: Invalid return value for setQuickMoveStack from menu: " + menuName() + ". Value: " + obj + ". Must be an ItemStack. Defaulting to super method.");
+            MenuJSHelperClass.logErrorMessageOnce("Invalid return value for setQuickMoveStack from menu: " + menuName() + ". Value: " + obj + ". Must be an ItemStack. Defaulting to super method.");
         }catch (Exception e) {
-            MenuJSHelperClass.logErrorMessageOnceCatchable("[MenuJS]: Error in menu builder for field setQuickMoveStack: " + menuName() + ".", e);
+            MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field setQuickMoveStack: " + menuName() + ".", e);
         }
         return ItemStack.EMPTY;
     }
@@ -72,9 +72,9 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
             if (obj != null) {
                 return (boolean) obj;
             }
-            MenuJSHelperClass.logErrorMessageOnce("[MenuJS]: Invalid return value for setStillValid from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method.");
+            MenuJSHelperClass.logErrorMessageOnce("Invalid return value for setStillValid from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method.");
         }catch (Exception e) {
-            MenuJSHelperClass.logErrorMessageOnceCatchable("[MenuJS]: Error in menu builder for field setStillValid: " + menuName() + ".", e);
+            MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field setStillValid: " + menuName() + ".", e);
         }
         return false;
     }
@@ -88,18 +88,14 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
                 if (obj != null) {
                     return (boolean) obj;
                 }
-                MenuJSHelperClass.logErrorMessageOnce("[MenuJS]: Invalid return value for isValidSlotIndex from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.isValidSlotIndex(pSlotIndex));
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for isValidSlotIndex from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.isValidSlotIndex(pSlotIndex));
             } catch (Exception e) {
-                MenuJSHelperClass.logErrorMessageOnceCatchable("[MenuJS]: Error in menu builder for field isValidSlotIndex: " + menuName() + ".", e);
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field isValidSlotIndex: " + menuName() + ".", e);
             }
         }
         return super.isValidSlotIndex(pSlotIndex);
     }
 
-    @Override
-    public void addSlotListener(ContainerListener pListener) {
-        super.addSlotListener(pListener);
-    }
 
     @Override
     public void setSynchronizer(ContainerSynchronizer pSynchronizer) {

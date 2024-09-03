@@ -5,6 +5,8 @@ import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.liopyu.menujs.util.ContextUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 
@@ -14,6 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMenu> extends BuilderBase<MenuType<T>> {
+    public transient SimpleContainer container;
     public static List<AbstractMenuContainerBuilder<?>> thisList = new ArrayList<>();
     public transient Function<ContextUtils.QuickStackContext, Object> setQuickMoveStack;
     public transient Function<ContextUtils.StillValidContext, Object> setStillValid;
@@ -42,6 +45,21 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     }
     public AbstractMenuContainerBuilder<T> addContainerData(ContainerData slot) {
         this.containerSlotList.add(slot);
+        return this;
+    }
+
+    public void setContainer() {
+        this.container = new SimpleContainer();
+    }
+    public void setContainer(int pSize) {
+        this.container = new SimpleContainer(pSize);
+    }
+    public void setContainer(ItemStack... pItems) {
+        this.container = new SimpleContainer(pItems);
+    }
+
+    public AbstractMenuContainerBuilder<T> addSlot(int pSlot, int pX, int pY) {
+        this.slotList.add(new Slot(this.container, pSlot,pX,pY));
         return this;
     }
     public AbstractMenuContainerBuilder<T> addSlot(Slot slot) {
