@@ -40,6 +40,11 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         }
 
     }
+
+    public AbstractMenuContainerBuilderJS getBuilder() {
+        return builder;
+    }
+
     public Inventory getPlayerInventory() {
         return playerInventory;
     }

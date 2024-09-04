@@ -4,6 +4,7 @@ import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import net.liopyu.menujs.util.ContextUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -48,6 +49,115 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public AbstractMenuContainerBuilder(ResourceLocation i) {
         super(i);
         thisList.add(this);
+    }
+    public Boolean shouldCloseOnEsc;
+
+    public AbstractMenuContainerBuilder<T> setShouldCloseOnEsc(boolean shouldClose) {
+        this.shouldCloseOnEsc = shouldClose;
+        return this;
+    }
+
+    public Component narrationMessage;
+
+    public AbstractMenuContainerBuilder<T> setNarrationMessage(Component narrationMessage) {
+        this.narrationMessage = narrationMessage;
+        return this;
+    }
+
+    public Component title;
+
+    public AbstractMenuContainerBuilder<T> setTitle(Component title) {
+        this.title = title;
+        return this;
+    }
+
+    public Integer xSize;
+    public Integer ySize;
+
+    public AbstractMenuContainerBuilder<T> setXSize(int size) {
+        this.xSize = size;
+        return this;
+    }
+
+    public AbstractMenuContainerBuilder<T> setYSize(int size) {
+        this.ySize = size;
+        return this;
+    }
+
+    public transient Function<ContextUtils.HasClickedOutsideContext, Object> hasClickedOutside;
+
+    public AbstractMenuContainerBuilder<T> hasClickedOutside(Function<ContextUtils.HasClickedOutsideContext, Object> arg) {
+        this.hasClickedOutside = arg;
+        return this;
+    }
+    public transient Function<ContextUtils.MouseDraggedContext, Object> mouseDragged;
+
+    public AbstractMenuContainerBuilder<T> mouseDragged(Function<ContextUtils.MouseDraggedContext, Object> arg) {
+        this.mouseDragged = arg;
+        return this;
+    }
+    public transient Function<ContextUtils.MouseClickedContext, Object> mouseReleased;
+
+    public AbstractMenuContainerBuilder<T> mouseReleased(Function<ContextUtils.MouseClickedContext, Object> arg) {
+        this.mouseReleased = arg;
+        return this;
+    }
+    public transient Function<ContextUtils.IsHoveringContext, Object> isHovering;
+
+    public AbstractMenuContainerBuilder<T> isHovering(Function<ContextUtils.IsHoveringContext, Object> arg) {
+        this.isHovering = arg;
+        return this;
+    }
+    public transient Function<ContextUtils.KeyPressedContext, Object> keyPressed;
+
+    public AbstractMenuContainerBuilder<T> keyPressed(Function<ContextUtils.KeyPressedContext, Object> arg) {
+        this.keyPressed = arg;
+        return this;
+    }
+    public transient Function<ContextUtils.CheckHotbarKeyPressedContext, Object> checkHotbarKeyPressed;
+
+    public AbstractMenuContainerBuilder<T> checkHotbarKeyPressed(Function<ContextUtils.CheckHotbarKeyPressedContext, Object> arg) {
+        this.checkHotbarKeyPressed = arg;
+        return this;
+    }
+    public transient Function<AbstractContainerScreen<?>, Object> isPauseScreen;
+
+    public AbstractMenuContainerBuilder<T> isPauseScreen(Function<AbstractContainerScreen<?>, Object> arg) {
+        this.isPauseScreen = arg;
+        return this;
+    }
+    public transient Function<AbstractContainerScreen<?>, Object> getSlotUnderMouse;
+
+    public AbstractMenuContainerBuilder<T> getSlotUnderMouse(Function<AbstractContainerScreen<?>, Object> arg) {
+        this.getSlotUnderMouse = arg;
+        return this;
+    }
+    public transient Function<AbstractContainerScreen<?>, Object> getGuiLeft;
+
+    public AbstractMenuContainerBuilder<T> getGuiLeft(Function<AbstractContainerScreen<?>, Object> arg) {
+        this.getGuiLeft = arg;
+        return this;
+    }
+    public transient Function<AbstractContainerScreen<?>, Object> getGuiTop;
+
+    public AbstractMenuContainerBuilder<T> getGuiTop(Function<AbstractContainerScreen<?>, Object> arg) {
+        this.getGuiTop = arg;
+        return this;
+    }
+
+    public transient Function<ContextUtils.MouseClickedContext, Object> mouseClicked;
+
+    public AbstractMenuContainerBuilder<T> mouseClicked(Function<ContextUtils.MouseClickedContext, Object> arg) {
+        this.mouseClicked = arg;
+        return this;
+    }
+
+    public transient Function<ContextUtils.ItemScreenContext, Object> setTooltipFromContainerItem;
+
+
+    public AbstractMenuContainerBuilder<T> setTooltipFromContainerItem(Function<ContextUtils.ItemScreenContext, Object> arg) {
+        this.setTooltipFromContainerItem = arg;
+        return this;
     }
     public transient Consumer<ContextUtils.InitialFocusContext> onSetInitialFocus;
     public transient Consumer<ContextUtils.InitialFocusContext> setInitialFocus;
@@ -422,18 +532,6 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         return this;
     }
 
-    public transient Function<ContextUtils.TooltipFromItemContext, Object> onGetTooltipFromContainerItem;
-    public transient Function<ContextUtils.TooltipFromItemContext, Object> getTooltipFromContainerItem;
-
-    public AbstractMenuContainerBuilder<T> onGetTooltipFromContainerItem(Function<ContextUtils.TooltipFromItemContext, Object> arg) {
-        this.onGetTooltipFromContainerItem = arg;
-        return this;
-    }
-
-    public AbstractMenuContainerBuilder<T> getTooltipFromContainerItem(Function<ContextUtils.TooltipFromItemContext, Object> arg) {
-        this.getTooltipFromContainerItem = arg;
-        return this;
-    }
 
     public transient Consumer<ContextUtils.ScreenRenderContext<T>> onRender;
     public transient Consumer<ContextUtils.ScreenRenderContext<T>> render;

@@ -239,15 +239,97 @@ public class ContextUtils {
             this.title = title;
         }
     }
-    public static class TooltipFromItemContext {
+    public static class MouseClickedContext {
         public final AbstractContainerScreen<?> screen;
-        public final ItemStack itemStack;
+        public final double mouseX;
+        public final double mouseY;
+        public final int button;
 
-        public TooltipFromItemContext(AbstractContainerScreen<?> screen, ItemStack itemStack) {
+        public MouseClickedContext(AbstractContainerScreen<?> screen, double mouseX, double mouseY, int button) {
             this.screen = screen;
-            this.itemStack = itemStack;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+            this.button = button;
         }
     }
+    public static class HasClickedOutsideContext {
+        public final AbstractContainerScreen<?> screen;
+        public final double mouseX;
+        public final double mouseY;
+        public final int guiLeft;
+        public final int guiTop;
+        public final int mouseButton;
+
+        public HasClickedOutsideContext(AbstractContainerScreen<?> screen, double mouseX, double mouseY, int guiLeft, int guiTop, int mouseButton) {
+            this.screen = screen;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+            this.guiLeft = guiLeft;
+            this.guiTop = guiTop;
+            this.mouseButton = mouseButton;
+        }
+    }
+    public static class MouseDraggedContext {
+        public final AbstractContainerScreen<?> screen;
+        public final double mouseX;
+        public final double mouseY;
+        public final int button;
+        public final double dragX;
+        public final double dragY;
+
+        public MouseDraggedContext(AbstractContainerScreen<?> screen, double mouseX, double mouseY, int button, double dragX, double dragY) {
+            this.screen = screen;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+            this.button = button;
+            this.dragX = dragX;
+            this.dragY = dragY;
+        }
+    }
+    public static class IsHoveringContext {
+        public final AbstractContainerScreen<?> screen;
+        public final int x;
+        public final int y;
+        public final int width;
+        public final int height;
+        public final double mouseX;
+        public final double mouseY;
+
+        public IsHoveringContext(AbstractContainerScreen<?> screen, int x, int y, int width, int height, double mouseX, double mouseY) {
+            this.screen = screen;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+        }
+    }
+    public static class KeyPressedContext {
+        public final AbstractContainerScreen<?> screen;
+        public final int keyCode;
+        public final int scanCode;
+        public final int modifiers;
+
+        public KeyPressedContext(AbstractContainerScreen<?> screen, int keyCode, int scanCode, int modifiers) {
+            this.screen = screen;
+            this.keyCode = keyCode;
+            this.scanCode = scanCode;
+            this.modifiers = modifiers;
+        }
+    }
+    public static class CheckHotbarKeyPressedContext {
+        public final AbstractContainerScreen<?> screen;
+        public final int keyCode;
+        public final int scanCode;
+
+        public CheckHotbarKeyPressedContext(AbstractContainerScreen<?> screen, int keyCode, int scanCode) {
+            this.screen = screen;
+            this.keyCode = keyCode;
+            this.scanCode = scanCode;
+        }
+    }
+
     public static class LabelRenderContext {
         public final AbstractContainerScreen<?> screen;
         public final GuiGraphics guiGraphics;
@@ -314,6 +396,15 @@ public class ContextUtils {
             this.menu = menu;
             this.slotIndex = slotIndex;
             this.itemStack = itemStack;
+        }
+    }
+    public static class ItemScreenContext {
+        public final AbstractContainerScreen<?> screen;
+        public final ItemStack item;
+
+        public ItemScreenContext(AbstractContainerScreen<?> screen, ItemStack item) {
+            this.screen = screen;
+            this.item = item;
         }
     }
     public static class ItemSlotContext {

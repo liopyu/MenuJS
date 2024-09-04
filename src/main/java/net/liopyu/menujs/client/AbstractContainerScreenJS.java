@@ -2,6 +2,7 @@ package net.liopyu.menujs.client;
 
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
 import net.liopyu.menujs.util.ContextUtils;
+import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static net.liopyu.menujs.util.MenuJSHelperClass.consumerCallback;
+import static net.liopyu.menujs.util.MenuJSHelperClass.convertObjectToDesired;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -50,7 +52,9 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
         this.playerInventory = pPlayerInventory;
     }
 
-
+    public AbstractMenuContainerBuilder<T> getBuilder() {
+        return builder;
+    }
 
     public Inventory getPlayerInventory() {
         return playerInventory;
@@ -122,6 +126,18 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
 
     @Override
     protected List<Component> getTooltipFromContainerItem(ItemStack pStack) {
+        if (builder.setTooltipFromContainerItem != null) {
+            try {
+                var context = new ContextUtils.ItemScreenContext(this,pStack);
+                var obj = convertObjectToDesired(builder.setTooltipFromContainerItem.apply(context), "list");
+                if (obj != null) {
+                    return (List<Component>) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for setTooltipFromContainerItem from menu: " + menuName() + ". Value: " + obj + ". Must be a List of Components. Defaulting to super method: " + super.getTooltipFromContainerItem(pStack));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field setTooltipFromContainerItem: " + menuName() + ".", e);
+            }
+        }
         return super.getTooltipFromContainerItem(pStack);
     }
 
@@ -142,23 +158,76 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        if (builder.mouseClicked != null) {
+            try {
+                var context = new ContextUtils.MouseClickedContext(this, pMouseX, pMouseY, pButton);
+                var obj = convertObjectToDesired(builder.mouseClicked.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for mouseClicked from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.mouseClicked(pMouseX, pMouseY, pButton));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field mouseClicked: " + menuName() + ".", e);
+            }
+        }
         return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
 
+
     @Override
     protected boolean hasClickedOutside(double pMouseX, double pMouseY, int pGuiLeft, int pGuiTop, int pMouseButton) {
+        if (builder.hasClickedOutside != null) {
+            try {
+                var context = new ContextUtils.HasClickedOutsideContext(this, pMouseX, pMouseY, pGuiLeft, pGuiTop, pMouseButton);
+                var obj = convertObjectToDesired(builder.hasClickedOutside.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for hasClickedOutside from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.hasClickedOutside(pMouseX, pMouseY, pGuiLeft, pGuiTop, pMouseButton));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field hasClickedOutside: " + menuName() + ".", e);
+            }
+        }
         return super.hasClickedOutside(pMouseX, pMouseY, pGuiLeft, pGuiTop, pMouseButton);
     }
 
+
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+        if (builder.mouseDragged != null) {
+            try {
+                var context = new ContextUtils.MouseDraggedContext(this, pMouseX, pMouseY, pButton, pDragX, pDragY);
+                var obj = convertObjectToDesired(builder.mouseDragged.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for mouseDragged from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field mouseDragged: " + menuName() + ".", e);
+            }
+        }
         return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
     }
 
+
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
+        if (builder.mouseReleased != null) {
+            try {
+                var context = new ContextUtils.MouseClickedContext(this, pMouseX, pMouseY, pButton);
+                var obj = convertObjectToDesired(builder.mouseReleased.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for mouseReleased from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.mouseReleased(pMouseX, pMouseY, pButton));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field mouseReleased: " + menuName() + ".", e);
+            }
+        }
         return super.mouseReleased(pMouseX, pMouseY, pButton);
     }
+
+
 
     @Override
     public void clearDraggingState() {
@@ -177,8 +246,21 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
 
     @Override
     protected boolean isHovering(int pX, int pY, int pWidth, int pHeight, double pMouseX, double pMouseY) {
+        if (builder.isHovering != null) {
+            try {
+                var context = new ContextUtils.IsHoveringContext(this, pX, pY, pWidth, pHeight, pMouseX, pMouseY);
+                var obj = convertObjectToDesired(builder.isHovering.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for isHovering from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.isHovering(pX, pY, pWidth, pHeight, pMouseX, pMouseY));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field isHovering: " + menuName() + ".", e);
+            }
+        }
         return super.isHovering(pX, pY, pWidth, pHeight, pMouseX, pMouseY);
     }
+
 
     @Override
     protected void slotClicked(Slot pSlot, int pSlotId, int pMouseButton, ClickType pType) {
@@ -197,18 +279,57 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+        if (builder.keyPressed != null) {
+            try {
+                var context = new ContextUtils.KeyPressedContext(this, pKeyCode, pScanCode, pModifiers);
+                var obj = convertObjectToDesired(builder.keyPressed.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for keyPressed from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.keyPressed(pKeyCode, pScanCode, pModifiers));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field keyPressed: " + menuName() + ".", e);
+            }
+        }
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
 
+
     @Override
     protected boolean checkHotbarKeyPressed(int pKeyCode, int pScanCode) {
+        if (builder.checkHotbarKeyPressed != null) {
+            try {
+                var context = new ContextUtils.CheckHotbarKeyPressedContext(this, pKeyCode, pScanCode);
+                var obj = convertObjectToDesired(builder.checkHotbarKeyPressed.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for checkHotbarKeyPressed from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.checkHotbarKeyPressed(pKeyCode, pScanCode));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field checkHotbarKeyPressed: " + menuName() + ".", e);
+            }
+        }
         return super.checkHotbarKeyPressed(pKeyCode, pScanCode);
     }
 
+
     @Override
     public boolean isPauseScreen() {
+        if (builder.isPauseScreen != null) {
+            try {
+                var obj = convertObjectToDesired(builder.isPauseScreen.apply(this), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for isPauseScreen from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.isPauseScreen());
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field isPauseScreen: " + menuName() + ".", e);
+            }
+        }
         return super.isPauseScreen();
     }
+
+
 
     @Override
     protected void containerTick() {
@@ -226,33 +347,71 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
 
     @Override
     public @Nullable Slot getSlotUnderMouse() {
+        if (builder.getSlotUnderMouse != null) {
+            try {
+                var obj = builder.getSlotUnderMouse.apply(this);
+                if (obj instanceof Slot) {
+                    return (Slot) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for getSlotUnderMouse from menu: " + menuName() + ". Value: " + obj + ". Must be a Slot or null. Defaulting to super method: " + super.getSlotUnderMouse());
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field getSlotUnderMouse: " + menuName() + ".", e);
+            }
+        }
         return super.getSlotUnderMouse();
     }
 
+
     @Override
     public int getGuiLeft() {
+        if (builder.getGuiLeft != null) {
+            try {
+                var obj = convertObjectToDesired(builder.getGuiLeft.apply(this), "integer");
+                if (obj != null) {
+                    return (int) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for getGuiLeft from menu: " + menuName() + ". Value: " + obj + ". Must be an integer. Defaulting to super method: " + super.getGuiLeft());
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field getGuiLeft: " + menuName() + ".", e);
+            }
+        }
         return super.getGuiLeft();
     }
 
+
     @Override
     public int getGuiTop() {
+        if (builder.getGuiTop != null) {
+            try {
+                var obj = convertObjectToDesired(builder.getGuiTop.apply(this), "integer");
+                if (obj != null) {
+                    return (int) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for getGuiTop from menu: " + menuName() + ". Value: " + obj + ". Must be an integer. Defaulting to super method: " + super.getGuiTop());
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field getGuiTop: " + menuName() + ".", e);
+            }
+        }
         return super.getGuiTop();
     }
 
+
     @Override
     public int getXSize() {
+        if (builder.xSize != null) {
+            return builder.xSize;
+        }
         return super.getXSize();
     }
 
     @Override
     public int getYSize() {
+        if (builder.ySize != null) {
+            return builder.ySize;
+        }
         return super.getYSize();
     }
 
-    @Override
-    public int getSlotColor(int index) {
-        return super.getSlotColor(index);
-    }
 
     @Override
     public void onClose() {
@@ -270,13 +429,21 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
 
     @Override
     public Component getTitle() {
+        if (builder.title != null) {
+            return builder.title;
+        }
         return super.getTitle();
     }
 
+
     @Override
     public Component getNarrationMessage() {
+        if (builder.narrationMessage != null) {
+            return builder.narrationMessage;
+        }
         return super.getNarrationMessage();
     }
+
 
     @Override
     protected void setInitialFocus(GuiEventListener pListener) {
@@ -310,9 +477,17 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
 
     @Override
     public boolean shouldCloseOnEsc() {
+        if (builder.shouldCloseOnEsc != null) {
+            return builder.shouldCloseOnEsc;
+        }
         return super.shouldCloseOnEsc();
     }
 
+
+
+   /* protected  addRenderableWidget(t pWidget) {
+        return super.addRenderableWidget(pWidget);
+    }*/
     @Override
     protected <t extends GuiEventListener & Renderable & NarratableEntry> t addRenderableWidget(t pWidget) {
         return super.addRenderableWidget(pWidget);

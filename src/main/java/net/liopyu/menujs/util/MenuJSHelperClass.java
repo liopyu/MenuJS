@@ -1,14 +1,14 @@
 package net.liopyu.menujs.util;
 
 import dev.latvian.mods.kubejs.util.ConsoleJS;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 public class MenuJSHelperClass {
     public static final Set<String> errorMessagesLogged = new HashSet<>();
@@ -98,8 +98,34 @@ public class MenuJSHelperClass {
             case "interactionresult" -> convertToInteractionResult(input);
             case "resourcelocation" -> convertToResourceLocation(input);
             case "itemstack" -> convertToItemStack(input);
+            case "list" -> convertToList(input);
             default -> input;
         };
+    }
+    public static List<Component> convertToList(Object input) {
+        List<Component> newList = new ArrayList<>();
+        if (input instanceof List<?> list) {
+            list.forEach(obj -> {
+                if (obj instanceof Component component){
+                    newList.add(component);
+                }else if (obj instanceof String string){
+                    newList.add(Component.literal(string));
+                }
+            });
+            return newList;
+        } else if (input instanceof Object[] array) {
+            if (!Arrays.stream(array).toList().isEmpty()) {
+                Arrays.stream(array).toList().forEach(obj -> {
+                    if (obj instanceof Component component){
+                        newList.add(component);
+                    }else if (obj instanceof String string){
+                        newList.add(Component.literal(string));
+                    }
+                });
+                return newList;
+            }
+        }
+        return null;
     }
     public static ItemStack convertToItemStack(Object input) {
         if (input instanceof ItemStack) {
