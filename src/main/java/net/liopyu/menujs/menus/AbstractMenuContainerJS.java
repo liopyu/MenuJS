@@ -1,4 +1,4 @@
-package net.liopyu.menujs.menus.container;
+package net.liopyu.menujs.menus;
 
 import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
 import net.liopyu.menujs.util.ContextUtils;
@@ -119,7 +119,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
     public void clicked(int pSlotId, int pButton, ClickType pClickType, Player pPlayer) {
         if (builder.onClicked != null) {
             final ContextUtils.SlotClickContext context = new ContextUtils.SlotClickContext(this,pSlotId,pButton,pClickType,pPlayer);
-            consumerCallback(builder.onClicked, context, "[EntityJS]: Error in " + menuName() + "builder for field: onClicked.");
+            consumerCallback(builder.onClicked, context, "Error in " + menuName() + "builder for field: onClicked.");
         }else super.clicked(pSlotId, pButton, pClickType, pPlayer);
     }
 
@@ -144,11 +144,11 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
     public void removed(Player pPlayer) {
         if (builder.onItemRemoved != null) {
             var context = new ContextUtils.PlayerMenuContext(pPlayer,this);
-            consumerCallback(builder.onItemRemoved, context, "[EntityJS]: Error in " + menuName() + "builder for field: onItemRemoved.");
+            consumerCallback(builder.onItemRemoved, context, "Error in " + menuName() + "builder for field: onItemRemoved.");
         }
         if (builder.setItemRemoved != null) {
             var context = new ContextUtils.PlayerMenuContext(pPlayer,this);
-            consumerCallback(builder.setItemRemoved, context, "[EntityJS]: Error in " + menuName() + "builder for field: setItemRemoved.");
+            consumerCallback(builder.setItemRemoved, context, "Error in " + menuName() + "builder for field: setItemRemoved.");
         }else super.removed(pPlayer);
     }
 
@@ -158,11 +158,11 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
     public void slotsChanged(Container pContainer) {
         if (builder.onMenuSlotChanged != null) {
             var context = new ContextUtils.ContainerMenuContext(this,pContainer);
-            consumerCallback(builder.onMenuSlotChanged, context, "[EntityJS]: Error in " + menuName() + "builder for field: onMenuSlotChanged.");
+            consumerCallback(builder.onMenuSlotChanged, context, "Error in " + menuName() + "builder for field: onMenuSlotChanged.");
         }
         if (builder.setMenuSlotChanged != null) {
             var context = new ContextUtils.ContainerMenuContext(this,pContainer);
-            consumerCallback(builder.setMenuSlotChanged, context, "[EntityJS]: Error in " + menuName() + "builder for field: setMenuSlotChanged.");
+            consumerCallback(builder.setMenuSlotChanged, context, "Error in " + menuName() + "builder for field: setMenuSlotChanged.");
         }else super.slotsChanged(pContainer);
     }
 
@@ -173,7 +173,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         super.initializeContents(pStateId, pItems, pCarried);
         if (builder.onInitializeContents != null) {
             var context = new ContextUtils.ContainerUpdateContext(this,pStateId,pItems,pCarried);
-            consumerCallback(builder.onInitializeContents, context, "[EntityJS]: Error in " + menuName() + "builder for field: onInitializeContents.");
+            consumerCallback(builder.onInitializeContents, context, "Error in " + menuName() + "builder for field: onInitializeContents.");
         }
     }
 
@@ -182,7 +182,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         super.setData(pId, pData);
         if (builder.onSetData != null) {
             var context = new ContextUtils.IndexDataContext(this,pId,pData);
-            consumerCallback(builder.onSetData, context, "[EntityJS]: Error in " + menuName() + "builder for field: onSetData.");
+            consumerCallback(builder.onSetData, context, "Error in " + menuName() + "builder for field: onSetData.");
         }
     }
 
@@ -226,7 +226,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
     public void setCarried(ItemStack pStack) {
         if (builder.setCarried != null) {
             var context = new ContextUtils.MenuItemStackContext(this,pStack);
-            consumerCallback(builder.setCarried, context, "[EntityJS]: Error in " + menuName() + "builder for field: setCarried.");
+            consumerCallback(builder.setCarried, context, "Error in " + menuName() + "builder for field: setCarried.");
         }else super.setCarried(pStack);
     }
 

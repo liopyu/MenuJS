@@ -1,9 +1,15 @@
 package net.liopyu.menujs.util;
 
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,9 +20,76 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class ContextUtils {
+    public static class RenderBackgroundContext {
+        public final AbstractContainerScreen<?> screen;
+        public final GuiGraphics guiGraphics;
+
+        public RenderBackgroundContext(AbstractContainerScreen<?> screen, GuiGraphics guiGraphics) {
+            this.screen = screen;
+            this.guiGraphics = guiGraphics;
+        }
+    }
+    public static class NarrationContext {
+        public final AbstractContainerScreen<?> screen;
+        public final boolean onlyNarrateNew;
+
+        public NarrationContext(AbstractContainerScreen<?> screen, boolean onlyNarrateNew) {
+            this.screen = screen;
+            this.onlyNarrateNew = onlyNarrateNew;
+        }
+    }
+    public static class NarrationStateContext {
+        public final AbstractContainerScreen<?> screen;
+        public final NarrationElementOutput narrationElementOutput;
+
+        public NarrationStateContext(AbstractContainerScreen<?> screen, NarrationElementOutput narrationElementOutput) {
+            this.screen = screen;
+            this.narrationElementOutput = narrationElementOutput;
+        }
+    }
+    public static class TooltipRenderPassContext {
+        public final AbstractContainerScreen<?> screen;
+        public final List<FormattedCharSequence> tooltip;
+        public final ClientTooltipPositioner positioner;
+        public final boolean override;
+
+        public TooltipRenderPassContext(AbstractContainerScreen<?> screen, List<FormattedCharSequence> tooltip, ClientTooltipPositioner positioner, boolean override) {
+            this.screen = screen;
+            this.tooltip = tooltip;
+            this.positioner = positioner;
+            this.override = override;
+        }
+    }
+
+
+    public static class FilesDropContext {
+        public final AbstractContainerScreen<?> screen;
+        public final List<Path> packs;
+
+        public FilesDropContext(AbstractContainerScreen<?> screen, List<Path> packs) {
+            this.screen = screen;
+            this.packs = packs;
+        }
+    }
+
+    public static class ResizeContext {
+        public final AbstractContainerScreen<?> screen;
+        public final Minecraft minecraft;
+        public final int width;
+        public final int height;
+
+        public ResizeContext(AbstractContainerScreen<?> screen, Minecraft minecraft, int width, int height) {
+            this.screen = screen;
+            this.minecraft = minecraft;
+            this.width = width;
+            this.height = height;
+        }
+    }
+
     public static class MenuItemStackContext {
         public final AbstractContainerMenu menu;
         public final ItemStack itemStack;
@@ -26,6 +99,64 @@ public class ContextUtils {
             this.itemStack = itemStack;
         }
     }
+    public static class InsertTextContext {
+        public final AbstractContainerScreen<?> screen;
+        public final String text;
+        public final boolean overwrite;
+
+        public InsertTextContext(AbstractContainerScreen<?> screen, String text, boolean overwrite) {
+            this.screen = screen;
+            this.text = text;
+            this.overwrite = overwrite;
+        }
+    }
+
+    public static class RemoveWidgetContext {
+        public final AbstractContainerScreen<?> screen;
+        public final GuiEventListener listener;
+
+        public RemoveWidgetContext(AbstractContainerScreen<?> screen, GuiEventListener listener) {
+            this.screen = screen;
+            this.listener = listener;
+        }
+    }
+
+    public static class FocusChangeContext {
+        public final AbstractContainerScreen<?> screen;
+        public final ComponentPath path;
+
+        public FocusChangeContext(AbstractContainerScreen<?> screen, ComponentPath path) {
+            this.screen = screen;
+            this.path = path;
+        }
+    }
+
+    public static class InitialFocusContext {
+        public final AbstractContainerScreen<?> screen;
+        public final GuiEventListener listener;
+
+        public InitialFocusContext(AbstractContainerScreen<?> screen, GuiEventListener listener) {
+            this.screen = screen;
+            this.listener = listener;
+        }
+    }
+
+    public static class SlotClickedContext {
+        public final AbstractContainerScreen<?> screen;
+        public final Slot slot;
+        public final int slotId;
+        public final int mouseButton;
+        public final ClickType clickType;
+
+        public SlotClickedContext(AbstractContainerScreen<?> screen, Slot slot, int slotId, int mouseButton, ClickType clickType) {
+            this.screen = screen;
+            this.slot = slot;
+            this.slotId = slotId;
+            this.mouseButton = mouseButton;
+            this.clickType = clickType;
+        }
+    }
+
     public static class SlotClickContext {
         public final AbstractContainerMenu menu;
         public final int slotId;
@@ -108,6 +239,43 @@ public class ContextUtils {
             this.title = title;
         }
     }
+    public static class TooltipFromItemContext {
+        public final AbstractContainerScreen<?> screen;
+        public final ItemStack itemStack;
+
+        public TooltipFromItemContext(AbstractContainerScreen<?> screen, ItemStack itemStack) {
+            this.screen = screen;
+            this.itemStack = itemStack;
+        }
+    }
+    public static class LabelRenderContext {
+        public final AbstractContainerScreen<?> screen;
+        public final GuiGraphics guiGraphics;
+        public final int mouseX;
+        public final int mouseY;
+
+        public LabelRenderContext(AbstractContainerScreen<?> screen, GuiGraphics guiGraphics, int mouseX, int mouseY) {
+            this.screen = screen;
+            this.guiGraphics = guiGraphics;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+        }
+    }
+
+    public static class TooltipRenderContext {
+        public final AbstractContainerScreen<?> screen;
+        public final GuiGraphics guiGraphics;
+        public final int x;
+        public final int y;
+
+        public TooltipRenderContext(AbstractContainerScreen<?> screen, GuiGraphics guiGraphics, int x, int y) {
+            this.screen = screen;
+            this.guiGraphics = guiGraphics;
+            this.x = x;
+            this.y = y;
+        }
+    }
+
     public static class ScreenRenderContext<T extends AbstractContainerMenu> {
         public final AbstractContainerScreen<T> screen;
         public final GuiGraphics guiGraphics;
@@ -123,6 +291,18 @@ public class ContextUtils {
             this.mouseY = mouseY;
         }
     }
+    public static class MouseMoveContext {
+        public final AbstractContainerScreen<?> screen;
+        public final double mouseX;
+        public final double mouseY;
+
+        public MouseMoveContext(AbstractContainerScreen<?> screen, double mouseX, double mouseY) {
+            this.screen = screen;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+        }
+    }
+
     public static class MenuItemContext<T extends AbstractContainerMenu> {
         public final AbstractContainerScreen<T> screen;
         public final T menu;

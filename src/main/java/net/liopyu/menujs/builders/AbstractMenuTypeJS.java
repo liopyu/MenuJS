@@ -1,7 +1,7 @@
 package net.liopyu.menujs.builders;
 
 import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
-import net.liopyu.menujs.menus.container.AbstractMenuContainerJS;
+import net.liopyu.menujs.menus.AbstractMenuContainerJS;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
