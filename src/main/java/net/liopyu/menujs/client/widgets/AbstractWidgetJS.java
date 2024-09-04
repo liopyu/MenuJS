@@ -1,5 +1,9 @@
 package net.liopyu.menujs.client.widgets;
 
+import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
+import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
+import net.liopyu.menujs.util.ContextUtils;
+import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -11,109 +15,134 @@ import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
-import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
+import static net.liopyu.menujs.util.MenuJSHelperClass.consumerCallback;
+import static net.liopyu.menujs.util.MenuJSHelperClass.convertObjectToDesired;
+
 public class AbstractWidgetJS extends AbstractWidget {
 
     private final AbstractWidgetBuilder builder;
+    private final AbstractMenuContainerBuilder<?> menuBuilder;
 
-    public AbstractWidgetJS(AbstractWidgetBuilder builder,int x, int y, int width, int height, Component message) {
+    public AbstractWidgetJS(AbstractWidgetBuilder builder, AbstractMenuContainerBuilder<?> menuBuilder, int x, int y, int width, int height, Component message) {
         super(x, y, width, height, message);
         this.builder = builder;
+        this.menuBuilder = menuBuilder;
+        var context = new ContextUtils.WidgetInitContext(builder,menuBuilder,x,y,width,height,message);
+        consumerCallback(builder.onInit,context,"Error in " + menuName() + "builder for field: onInit.");
     }
-
+    public String menuName(){
+        return this.menuBuilder.id.toString();
+    }
     public AbstractWidgetBuilder getBuilder() {
         return builder;
     }
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v) {
+        if (builder.renderWidget != null) {
+            final ContextUtils.ScreenRenderContextW context = new ContextUtils.ScreenRenderContextW(this,guiGraphics,v,i,i1);
+            consumerCallback(builder.renderWidget, context, "Error in " + menuName() + "builder for field: renderWidget.");
+        }
     }
 
-    @Override
-    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-    }
 
     @Override
-    public int getHeight() {
-        return super.getHeight();
+    protected void updateWidgetNarration(NarrationElementOutput p_169396_) {
+        var context = new ContextUtils.NarrationStateContextW(this, p_169396_);
+        if (builder.updateWidgetNarration != null) {
+            consumerCallback(builder.updateWidgetNarration, context, "Error in " + menuName() + "builder for field: updateWidgetNarration.");
+        }
+
+        if (builder.onUpdateWidgetNarration != null) {
+            consumerCallback(builder.onUpdateWidgetNarration, context, "Error in " + menuName() + "builder for field: onUpdateWidgetNarration.");
+        }
     }
+
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-    }
-
-    @Override
-    protected ClientTooltipPositioner createTooltipPositioner() {
-        return super.createTooltipPositioner();
-    }
-
-    @Override
-    public void setTooltip(@Nullable Tooltip pTooltip) {
-        super.setTooltip(pTooltip);
-    }
-
-    @Nullable
-    @Override
-    public Tooltip getTooltip() {
-        return super.getTooltip();
-    }
-
-    @Override
-    public void setTooltipDelay(int pTooltipMsDelay) {
-        super.setTooltipDelay(pTooltipMsDelay);
-    }
-
-    @Override
-    protected MutableComponent createNarrationMessage() {
-        return super.createNarrationMessage();
-    }
-
-    @Override
-    protected void renderScrollingString(GuiGraphics pGuiGraphics, Font pFont, int pWidth, int pColor) {
-        super.renderScrollingString(pGuiGraphics, pFont, pWidth, pColor);
-    }
-
-    @Override
-    public void renderTexture(GuiGraphics pGuiGraphics, ResourceLocation pTexture, int pX, int pY, int pUOffset, int pVOffset, int pTextureDifference, int pWidth, int pHeight, int pTextureWidth, int pTextureHeight) {
-        super.renderTexture(pGuiGraphics, pTexture, pX, pY, pUOffset, pVOffset, pTextureDifference, pWidth, pHeight, pTextureWidth, pTextureHeight);
+        var context = new ContextUtils.ScreenRenderContextW(this,pGuiGraphics,pPartialTick,pMouseX,pMouseY);
+        if (builder.render != null) {
+            consumerCallback(builder.render, context, "Error in " + menuName() + "builder for field: render.");
+        }else super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+        if (builder.onRender != null) {
+            consumerCallback(builder.onRender, context, "Error in " + menuName() + "builder for field: onRender.");
+        }
     }
 
     @Override
     public void onClick(double pMouseX, double pMouseY) {
+        if (builder.onClick != null) {
+            var context = new ContextUtils.OnClickContext(this, pMouseX, pMouseY);
+            consumerCallback(builder.onClick, context, "Error in " + menuName() + " builder for field: onClick.");
+        }
         super.onClick(pMouseX, pMouseY);
     }
 
+
+
     @Override
     public void onRelease(double pMouseX, double pMouseY) {
+        if (builder.onRelease != null) {
+            var context = new ContextUtils.OnClickContext(this, pMouseX, pMouseY);
+            consumerCallback(builder.onRelease, context, "Error in " + menuName() + " builder for field: onRelease.");
+        }
         super.onRelease(pMouseX, pMouseY);
     }
 
     @Override
     protected void onDrag(double pMouseX, double pMouseY, double pDragX, double pDragY) {
+        if (builder.onDrag != null) {
+            var context = new ContextUtils.DragContext(this, pMouseX, pMouseY, pDragX, pDragY);
+            consumerCallback(builder.onDrag, context, "Error in " + menuName() + " builder for field: onDrag.");
+        }
         super.onDrag(pMouseX, pMouseY, pDragX, pDragY);
     }
 
+
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        if (builder.mouseClicked != null) {
+            try {
+                var context = new ContextUtils.MouseClickedContext(this, pMouseX, pMouseY, pButton);
+                var obj = convertObjectToDesired(builder.mouseClicked.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for mouseClicked from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.mouseClicked(pMouseX, pMouseY, pButton));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field mouseClicked: " + menuName() + ".", e);
+            }
+        }
         return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
 
+
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
+        if (builder.onMouseReleased != null) {
+            var context = new ContextUtils.MouseClickedContextW(this, pMouseX, pMouseY, pButton);
+            consumerCallback(builder.onMouseReleased, context, "Error in " + menuName() + " builder for field: onMouseReleased.");
+        }
         return super.mouseReleased(pMouseX, pMouseY, pButton);
     }
 
+
     @Override
     protected boolean isValidClickButton(int pButton) {
+        if (builder.onValidClickButton != null) {
+            var context = new ContextUtils.ValidClickButtonContext(this, pButton);
+            consumerCallback(builder.onValidClickButton, context, "Error in " + menuName() + " builder for field: onValidClickButton.");
+        }
         return super.isValidClickButton(pButton);
     }
+
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {

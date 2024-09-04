@@ -98,11 +98,12 @@ public class MenuJSHelperClass {
             case "interactionresult" -> convertToInteractionResult(input);
             case "resourcelocation" -> convertToResourceLocation(input);
             case "itemstack" -> convertToItemStack(input);
-            case "list" -> convertToList(input);
+            case "list" -> convertToComponentList(input);
             default -> input;
         };
     }
-    public static List<Component> convertToList(Object input) {
+
+    public static List<Component> convertToComponentList(Object input) {
         List<Component> newList = new ArrayList<>();
         if (input instanceof List<?> list) {
             list.forEach(obj -> {

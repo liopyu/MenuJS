@@ -28,7 +28,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         builder.setPlayerInventory(playerInventory);
 
         var context = new ContextUtils.MenuBuilderContext<>(builder,pMenuType,pContainerId,playerInventory);
-        builder.onMenuInit.accept(context);
+        consumerCallback(builder.onMenuInit,context,"Error in " + menuName() + "builder for field: onMenuInit.");
         for (Slot slot : builder.slotList){
             this.addSlot(slot);
         }
@@ -38,7 +38,6 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         for (ContainerData slot : builder.containerSlotList){
             this.addDataSlots(slot);
         }
-
     }
 
     public AbstractMenuContainerBuilderJS getBuilder() {

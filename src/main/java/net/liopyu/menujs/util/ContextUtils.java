@@ -1,9 +1,11 @@
 package net.liopyu.menujs.util;
 
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
+import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -40,6 +42,15 @@ public class ContextUtils {
         public NarrationContext(AbstractContainerScreen<?> screen, boolean onlyNarrateNew) {
             this.screen = screen;
             this.onlyNarrateNew = onlyNarrateNew;
+        }
+    }
+    public static class NarrationStateContextW {
+        public final AbstractWidget widget;
+        public final NarrationElementOutput narrationElementOutput;
+
+        public NarrationStateContextW(AbstractWidget widget, NarrationElementOutput narrationElementOutput) {
+            this.widget = widget;
+            this.narrationElementOutput = narrationElementOutput;
         }
     }
     public static class NarrationStateContext {
@@ -239,6 +250,29 @@ public class ContextUtils {
             this.title = title;
         }
     }
+    public static class ValidClickButtonContext {
+        public final AbstractWidget widget;
+        public final int button;
+
+        public ValidClickButtonContext(AbstractWidget widget, int button) {
+            this.widget = widget;
+            this.button = button;
+        }
+    }
+
+    public static class MouseClickedContextW {
+        public final AbstractWidget widget;
+        public final double mouseX;
+        public final double mouseY;
+        public final int button;
+
+        public MouseClickedContextW(AbstractWidget widget, double mouseX, double mouseY, int button) {
+            this.widget = widget;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+            this.button = button;
+        }
+    }
     public static class MouseClickedContext {
         public final AbstractContainerScreen<?> screen;
         public final double mouseX;
@@ -357,7 +391,21 @@ public class ContextUtils {
             this.y = y;
         }
     }
+    public static class ScreenRenderContextW {
+        public final AbstractWidget widget;
+        public final GuiGraphics guiGraphics;
+        public final float partialTick;
+        public final int mouseX;
+        public final int mouseY;
 
+        public ScreenRenderContextW(AbstractWidget widget, GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+            this.widget = widget;
+            this.guiGraphics = guiGraphics;
+            this.partialTick = partialTick;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+        }
+    }
     public static class ScreenRenderContext<T extends AbstractContainerMenu> {
         public final AbstractContainerScreen<T> screen;
         public final GuiGraphics guiGraphics;
@@ -479,6 +527,52 @@ public class ContextUtils {
             this.reverseDirection = reverseDirection;
         }
     }
+    public static class DragContext {
+        public final AbstractWidget widget;
+        public final double mouseX;
+        public final double mouseY;
+        public final double dragX;
+        public final double dragY;
 
+        public DragContext(AbstractWidget widget, double mouseX, double mouseY, double dragX, double dragY) {
+            this.widget = widget;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+            this.dragX = dragX;
+            this.dragY = dragY;
+        }
+    }
+
+    public static class OnClickContext {
+        public final AbstractWidget widget;
+        public final double mouseX;
+        public final double mouseY;
+
+        public OnClickContext(AbstractWidget widget, double mouseX, double mouseY) {
+            this.widget = widget;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+        }
+    }
+
+    public static class WidgetInitContext{
+        public final AbstractWidgetBuilder builder;
+        public final AbstractMenuContainerBuilder<?> menuBuilder;
+        public final int x;
+        public final int y;
+        public final int width;
+        public final int height;
+        public final Component message;
+
+        public WidgetInitContext(AbstractWidgetBuilder builder, AbstractMenuContainerBuilder<?> menuBuilder, int x, int y, int width, int height, Component message) {
+            this.builder = builder;
+            this.menuBuilder = menuBuilder;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.message = message;
+        }
+    }
 
 }
