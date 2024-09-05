@@ -1,5 +1,6 @@
 package net.liopyu.menujs.builders.widgets;
 
+import dev.latvian.mods.rhino.util.HideFromJS;
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
 import net.liopyu.menujs.client.widgets.AbstractWidgetJS;
 import net.liopyu.menujs.util.ContextUtils;
@@ -203,6 +204,7 @@ public class AbstractWidgetBuilder {
         return this;
     }
 
+    @HideFromJS
     public AbstractWidgetJS build(int x, int y, int width, int height, Component message) {
         return new AbstractWidgetJS(this, menuBuilder, x, y, width, height, message);
     }

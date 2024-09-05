@@ -4,6 +4,7 @@ import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
 import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,13 +18,19 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
 
 import static net.liopyu.menujs.util.MenuJSHelperClass.consumerCallback;
 import static net.liopyu.menujs.util.MenuJSHelperClass.convertObjectToDesired;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+@OnlyIn(Dist.CLIENT)
 public class AbstractWidgetJS extends AbstractWidget {
 
     private final AbstractWidgetBuilder builder;
@@ -33,12 +40,16 @@ public class AbstractWidgetJS extends AbstractWidget {
         super(x, y, width, height, message);
         this.builder = builder;
         this.menuBuilder = menuBuilder;
-        var context = new ContextUtils.WidgetInitContext(builder,menuBuilder,x,y,width,height,message);
-        consumerCallback(builder.onInit,context,"Error in " + menuName() + "builder for field: onInit.");
+        if (builder.onInit != null) {
+            var context = new ContextUtils.WidgetInitContext(builder, menuBuilder, x, y, width, height, message);
+            consumerCallback(builder.onInit, context, "Error in " + menuName() + "builder for field: onInit.");
+        }
     }
-    public String menuName(){
+
+    public String menuName() {
         return this.menuBuilder.id.toString();
     }
+
     public AbstractWidgetBuilder getBuilder() {
         return builder;
     }
@@ -46,7 +57,7 @@ public class AbstractWidgetJS extends AbstractWidget {
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v) {
         if (builder.renderWidget != null) {
-            final ContextUtils.ScreenRenderContextW context = new ContextUtils.ScreenRenderContextW(this,guiGraphics,v,i,i1);
+            final ContextUtils.ScreenRenderContextW context = new ContextUtils.ScreenRenderContextW(this, guiGraphics, v, i, i1);
             consumerCallback(builder.renderWidget, context, "Error in " + menuName() + "builder for field: renderWidget.");
         }
     }
@@ -67,10 +78,10 @@ public class AbstractWidgetJS extends AbstractWidget {
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        var context = new ContextUtils.ScreenRenderContextW(this,pGuiGraphics,pPartialTick,pMouseX,pMouseY);
+        var context = new ContextUtils.ScreenRenderContextW(this, pGuiGraphics, pPartialTick, pMouseX, pMouseY);
         if (builder.render != null) {
             consumerCallback(builder.render, context, "Error in " + menuName() + "builder for field: render.");
-        }else super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+        } else super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         if (builder.onRender != null) {
             consumerCallback(builder.onRender, context, "Error in " + menuName() + "builder for field: onRender.");
         }
@@ -84,7 +95,6 @@ public class AbstractWidgetJS extends AbstractWidget {
         }
         super.onClick(pMouseX, pMouseY);
     }
-
 
 
     @Override
@@ -158,7 +168,6 @@ public class AbstractWidgetJS extends AbstractWidget {
         }
         return super.isValidClickButton(pButton);
     }
-
 
 
     @Override
@@ -266,7 +275,6 @@ public class AbstractWidgetJS extends AbstractWidget {
     }
 
 
-
     @Override
     public void setFocused(boolean pFocused) {
         var context = new ContextUtils.SetFocusedContext(this, pFocused);
@@ -279,7 +287,6 @@ public class AbstractWidgetJS extends AbstractWidget {
             super.setFocused(pFocused);
         }
     }
-
 
 
     @Override

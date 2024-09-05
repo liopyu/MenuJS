@@ -1,6 +1,8 @@
 package net.liopyu.menujs.client;
 
+import dev.latvian.mods.kubejs.util.ConsoleJS;
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
+import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
 import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
@@ -52,9 +54,7 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
         super(pMenu, pPlayerInventory, pTitle);
         this.builder = builder;
         this.playerInventory = pPlayerInventory;
-        for (AbstractWidget widget : builder.renderableWidgets) {
-            this.addRenderableWidget(widget);
-        }
+
     }
 
     public AbstractMenuContainerBuilder<T> getBuilder() {
@@ -68,8 +68,13 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     protected void init() {
         super.init();
         this.menu.addSlotListener(this);
-        var context = new ContextUtils.ScreenBuilderContext<>(this, builder, getMenu(), getPlayerInventory(), getTitle());
-        consumerCallback(builder.onScreenInit, context, "Error in " + menuName() + "builder for field: onScreenInit.");
+        if (builder.onScreenInit != null) {
+            var context = new ContextUtils.ScreenBuilderContext(this, builder, getMenu(), getPlayerInventory(), getTitle());
+            consumerCallback(builder.onScreenInit, context, "Error in " + menuName() + "builder for field: onScreenInit.");
+        }
+        for (AbstractWidget widget : builder.renderableWidgets) {
+            this.addRenderableWidget(widget);
+        }
     }
 
     public void removed() {
@@ -84,7 +89,7 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
         if (builder.renderBg != null) {
-            final ContextUtils.ScreenRenderContext<T> context = new ContextUtils.ScreenRenderContext<>(this, guiGraphics, v, i, i1);
+            final ContextUtils.ScreenRenderContext context = new ContextUtils.ScreenRenderContext(this, guiGraphics, v, i, i1);
             consumerCallback(builder.renderBg, context, "Error in " + menuName() + "builder for field: renderBg.");
         }
     }
@@ -92,7 +97,7 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     @Override
     public void slotChanged(AbstractContainerMenu abstractContainerMenu, int i, ItemStack itemStack) {
         if (builder.onScreenSlotChanged != null) {
-            final ContextUtils.MenuItemContext<T> context = new ContextUtils.MenuItemContext<>(this, getMenu(), i, itemStack);
+            final ContextUtils.MenuItemContext context = new ContextUtils.MenuItemContext(this, getMenu(), i, itemStack);
             consumerCallback(builder.onScreenSlotChanged, context, "Error in " + menuName() + "builder for field: onScreenSlotChanged.");
         }
     }
@@ -100,14 +105,14 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     @Override
     public void dataChanged(AbstractContainerMenu abstractContainerMenu, int i, int i1) {
         if (builder.onDataChanged != null) {
-            final ContextUtils.DataChangedContext<T> context = new ContextUtils.DataChangedContext<>(getMenu(), this, i, i1);
+            final ContextUtils.DataChangedContext context = new ContextUtils.DataChangedContext(getMenu(), this, i, i1);
             consumerCallback(builder.onDataChanged, context, "Error in " + menuName() + "builder for field: onDataChanged.");
         }
     }
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        var context = new ContextUtils.ScreenRenderContext<>(this, pGuiGraphics, pPartialTick, pMouseX, pMouseY);
+        var context = new ContextUtils.ScreenRenderContext(this, pGuiGraphics, pPartialTick, pMouseX, pMouseY);
         if (builder.render != null) {
             consumerCallback(builder.render, context, "Error in " + menuName() + "builder for field: render.");
         } else super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);

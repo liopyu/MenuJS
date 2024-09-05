@@ -1,6 +1,7 @@
 package net.liopyu.menujs.util;
 
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
+import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
 import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
@@ -37,6 +38,7 @@ public class ContextUtils {
             this.guiGraphics = guiGraphics;
         }
     }
+
     public static class NarrationContext {
         public final AbstractContainerScreen<?> screen;
         public final boolean onlyNarrateNew;
@@ -46,6 +48,7 @@ public class ContextUtils {
             this.onlyNarrateNew = onlyNarrateNew;
         }
     }
+
     public static class NarrationStateContextW {
         public final AbstractWidget widget;
         public final NarrationElementOutput narrationElementOutput;
@@ -55,6 +58,7 @@ public class ContextUtils {
             this.narrationElementOutput = narrationElementOutput;
         }
     }
+
     public static class NarrationStateContext {
         public final AbstractContainerScreen<?> screen;
         public final NarrationElementOutput narrationElementOutput;
@@ -64,6 +68,7 @@ public class ContextUtils {
             this.narrationElementOutput = narrationElementOutput;
         }
     }
+
     public static class TooltipRenderPassContext {
         public final AbstractContainerScreen<?> screen;
         public final List<FormattedCharSequence> tooltip;
@@ -112,6 +117,7 @@ public class ContextUtils {
             this.itemStack = itemStack;
         }
     }
+
     public static class InsertTextContext {
         public final AbstractContainerScreen<?> screen;
         public final String text;
@@ -185,7 +191,8 @@ public class ContextUtils {
             this.player = player;
         }
     }
-    public static class PlayerIndexContext{
+
+    public static class PlayerIndexContext {
         public final Player player;
         public final int index;
         public final AbstractContainerMenu menu;
@@ -196,7 +203,8 @@ public class ContextUtils {
             this.menu = menu;
         }
     }
-    public static class ContainerMenuContext{
+
+    public static class ContainerMenuContext {
         public final AbstractContainerMenu menu;
         public final Container container;
 
@@ -205,7 +213,8 @@ public class ContextUtils {
             this.container = container;
         }
     }
-    public static class PlayerMenuContext{
+
+    public static class PlayerMenuContext {
         public final Player player;
         public final AbstractContainerMenu menu;
 
@@ -214,20 +223,22 @@ public class ContextUtils {
             this.menu = menu;
         }
     }
-    public static class IndexContext{
+
+    public static class IndexContext {
         public final AbstractContainerMenu menu;
         public final int index;
 
-        public IndexContext(int index,AbstractContainerMenu menu) {
+        public IndexContext(int index, AbstractContainerMenu menu) {
             this.menu = menu;
             this.index = index;
         }
     }
-    public static class MenuBuilderContext<T extends AbstractContainerMenu>{
+
+    public static class MenuBuilderContext<T extends AbstractContainerMenu> {
         public final AbstractMenuContainerBuilder<T> builder;
-        public final  @Nullable MenuType<?> pMenuType;
+        public final @Nullable MenuType<?> pMenuType;
         public final int pContainerId;
-        public final  Inventory playerInventory;
+        public final Inventory playerInventory;
 
         public MenuBuilderContext(AbstractMenuContainerBuilder<T> builder, @Nullable MenuType<?> pMenuType, int pContainerId, Inventory playerInventory) {
             this.builder = builder;
@@ -236,14 +247,15 @@ public class ContextUtils {
             this.playerInventory = playerInventory;
         }
     }
-    public static class ScreenBuilderContext<T extends AbstractContainerMenu>{
-        public final AbstractMenuContainerBuilder<T> builder;
-        public final AbstractContainerScreen<T> screen;
-        public final T menu;
-        public final  Inventory playerInventory;
+
+    public static class ScreenBuilderContext {
+        public final AbstractMenuContainerBuilder<? extends AbstractContainerMenu> builder;
+        public final AbstractContainerScreen<? extends AbstractContainerMenu> screen;
+        public final AbstractContainerMenu menu;
+        public final Inventory playerInventory;
         public final Component title;
 
-        public ScreenBuilderContext(AbstractContainerScreen<T> screen,AbstractMenuContainerBuilder<T> builder,  T menu, Inventory playerInventory, Component title) {
+        public ScreenBuilderContext(AbstractContainerScreen<? extends AbstractContainerMenu> screen, AbstractMenuContainerBuilder<? extends AbstractContainerMenu> builder, AbstractContainerMenu menu, Inventory playerInventory, Component title) {
 
             this.builder = builder;
             this.screen = screen;
@@ -252,6 +264,7 @@ public class ContextUtils {
             this.title = title;
         }
     }
+
     public static class ValidClickButtonContext {
         public final AbstractWidget widget;
         public final int button;
@@ -261,6 +274,7 @@ public class ContextUtils {
             this.button = button;
         }
     }
+
     public static class PlayDownSoundContext {
         public final AbstractWidget widget;
         public final SoundManager handler;
@@ -270,6 +284,7 @@ public class ContextUtils {
             this.handler = handler;
         }
     }
+
     public static class SetFocusedContext {
         public final AbstractWidget widget;
         public final boolean focused;
@@ -293,6 +308,7 @@ public class ContextUtils {
             this.button = button;
         }
     }
+
     public static class MouseClickedContext {
         public final AbstractContainerScreen<?> screen;
         public final double mouseX;
@@ -306,6 +322,7 @@ public class ContextUtils {
             this.button = button;
         }
     }
+
     public static class HasClickedOutsideContext {
         public final AbstractContainerScreen<?> screen;
         public final double mouseX;
@@ -323,6 +340,7 @@ public class ContextUtils {
             this.mouseButton = mouseButton;
         }
     }
+
     public static class MouseDraggedContext {
         public final AbstractContainerScreen<?> screen;
         public final double mouseX;
@@ -340,6 +358,7 @@ public class ContextUtils {
             this.dragY = dragY;
         }
     }
+
     public static class IsHoveringContext {
         public final AbstractContainerScreen<?> screen;
         public final int x;
@@ -359,6 +378,7 @@ public class ContextUtils {
             this.mouseY = mouseY;
         }
     }
+
     public static class KeyPressedContext {
         public final AbstractContainerScreen<?> screen;
         public final int keyCode;
@@ -372,6 +392,7 @@ public class ContextUtils {
             this.modifiers = modifiers;
         }
     }
+
     public static class CheckHotbarKeyPressedContext {
         public final AbstractContainerScreen<?> screen;
         public final int keyCode;
@@ -411,6 +432,7 @@ public class ContextUtils {
             this.y = y;
         }
     }
+
     public static class ScreenRenderContextW {
         public final AbstractWidget widget;
         public final GuiGraphics guiGraphics;
@@ -426,14 +448,15 @@ public class ContextUtils {
             this.mouseY = mouseY;
         }
     }
-    public static class ScreenRenderContext<T extends AbstractContainerMenu> {
-        public final AbstractContainerScreen<T> screen;
+
+    public static class ScreenRenderContext {
+        public final AbstractContainerScreen<? extends AbstractContainerMenu> screen;
         public final GuiGraphics guiGraphics;
         public final float partialTick;
         public final int mouseX;
         public final int mouseY;
 
-        public ScreenRenderContext(AbstractContainerScreen<T> screen, GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+        public ScreenRenderContext(AbstractContainerScreen<? extends AbstractContainerMenu> screen, GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
             this.screen = screen;
             this.guiGraphics = guiGraphics;
             this.partialTick = partialTick;
@@ -441,6 +464,7 @@ public class ContextUtils {
             this.mouseY = mouseY;
         }
     }
+
     public static class MouseMovedContext {
         public final AbstractWidget widget;
         public final double mouseX;
@@ -452,6 +476,7 @@ public class ContextUtils {
             this.mouseY = mouseY;
         }
     }
+
     public static class ClickedContextW {
         public final AbstractWidget widget;
         public final double mouseX;
@@ -463,6 +488,7 @@ public class ContextUtils {
             this.mouseY = mouseY;
         }
     }
+
     public static class IsMouseOverContextW {
         public final AbstractWidget widget;
         public final double mouseX;
@@ -474,6 +500,7 @@ public class ContextUtils {
             this.mouseY = mouseY;
         }
     }
+
     public static class KeyPressedContextW {
         public final AbstractWidget widget;
         public final int keyCode;
@@ -487,6 +514,7 @@ public class ContextUtils {
             this.modifiers = modifiers;
         }
     }
+
     public static class KeyReleasedContextW {
         public final AbstractWidget widget;
         public final int keyCode;
@@ -500,6 +528,7 @@ public class ContextUtils {
             this.modifiers = modifiers;
         }
     }
+
     public static class NextFocusPathContextW {
         public final AbstractWidget widget;
         public final FocusNavigationEvent event;
@@ -574,19 +603,20 @@ public class ContextUtils {
         }
     }
 
-    public static class MenuItemContext<T extends AbstractContainerMenu> {
-        public final AbstractContainerScreen<T> screen;
-        public final T menu;
+    public static class MenuItemContext {
+        public final AbstractContainerScreen<? extends AbstractContainerMenu> screen;
+        public final AbstractContainerMenu menu;
         public final int slotIndex;
         public final ItemStack itemStack;
 
-        public MenuItemContext(AbstractContainerScreen<T> screen, T menu, int slotIndex, ItemStack itemStack) {
+        public MenuItemContext(AbstractContainerScreen<? extends AbstractContainerMenu> screen, AbstractContainerMenu menu, int slotIndex, ItemStack itemStack) {
             this.screen = screen;
             this.menu = menu;
             this.slotIndex = slotIndex;
             this.itemStack = itemStack;
         }
     }
+
     public static class ItemScreenContext {
         public final AbstractContainerScreen<?> screen;
         public final ItemStack item;
@@ -596,6 +626,7 @@ public class ContextUtils {
             this.item = item;
         }
     }
+
     public static class ItemSlotContext {
         public final AbstractContainerMenu menu;
         public final ItemStack item;
@@ -607,19 +638,21 @@ public class ContextUtils {
             this.slot = slot;
         }
     }
-    public static class DataChangedContext<T extends AbstractContainerMenu> {
-        public final T menu;
-        public final AbstractContainerScreen<T> screen;
+
+    public static class DataChangedContext {
+        public final AbstractContainerMenu menu;
+        public final AbstractContainerScreen<? extends AbstractContainerMenu> screen;
         public final int dataId;
         public final int dataValue;
 
-        public DataChangedContext(T menu, AbstractContainerScreen<T> screen, int dataId, int dataValue) {
+        public DataChangedContext(AbstractContainerMenu menu, AbstractContainerScreen<? extends AbstractContainerMenu> screen, int dataId, int dataValue) {
             this.menu = menu;
             this.screen = screen;
             this.dataId = dataId;
             this.dataValue = dataValue;
         }
     }
+
     public static class ContainerUpdateContext {
         public final AbstractContainerMenu menu;
         public final int stateId;
@@ -633,6 +666,7 @@ public class ContextUtils {
             this.carried = carried;
         }
     }
+
     public static class IndexDataContext {
         public final AbstractContainerMenu menu;
         public final int index;
@@ -644,6 +678,7 @@ public class ContextUtils {
             this.data = data;
         }
     }
+
     public static class MenuSlotContext {
         public final AbstractContainerMenu menu;
         public final Slot slot;
@@ -653,6 +688,7 @@ public class ContextUtils {
             this.slot = slot;
         }
     }
+
     public static class TransferStackContext {
         public final AbstractContainerMenu menu;
         public final ItemStack stack;
@@ -668,6 +704,7 @@ public class ContextUtils {
             this.reverseDirection = reverseDirection;
         }
     }
+
     public static class DragContext {
         public final AbstractWidget widget;
         public final double mouseX;
@@ -696,7 +733,7 @@ public class ContextUtils {
         }
     }
 
-    public static class WidgetInitContext{
+    public static class WidgetInitContext {
         public final AbstractWidgetBuilder builder;
         public final AbstractMenuContainerBuilder<?> menuBuilder;
         public final int x;

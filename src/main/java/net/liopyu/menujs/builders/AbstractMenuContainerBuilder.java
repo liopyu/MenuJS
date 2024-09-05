@@ -2,9 +2,13 @@ package net.liopyu.menujs.builders;
 
 import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
+import dev.latvian.mods.rhino.util.HideFromJS;
+import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
 import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
+import net.liopyu.menujs.client.widgets.AbstractWidgetJS;
 import net.liopyu.menujs.util.ContextUtils;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +17,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -25,17 +30,21 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public final List<ContainerData> containerSlotList = new ArrayList<>();
     public final List<DataSlot> dataSlotList = new ArrayList<>();
     public final List<AbstractWidget> renderableWidgets = new ArrayList<>();
+    @HideFromJS
+    public Integer xSize;
+    @HideFromJS
+    public Integer ySize;
     public transient SimpleContainer container;
     public transient Function<ContextUtils.PlayerIndexContext, Object> setQuickMoveStack;
     public transient Function<ContextUtils.PlayerMenuContext, Object> setStillValid;
     public transient Function<ContextUtils.IndexContext, Object> isValidSlotIndex;
     public transient Consumer<ContextUtils.MenuBuilderContext<T>> onMenuInit;
-    public transient Consumer<ContextUtils.ScreenBuilderContext<T>> onScreenInit;
-    public transient Consumer<ContextUtils.DataChangedContext<T>> onDataChanged;
-    public transient Consumer<ContextUtils.MenuItemContext<T>> onScreenSlotChanged;
+    public transient Consumer<ContextUtils.ScreenBuilderContext> onScreenInit;
+    public transient Consumer<ContextUtils.DataChangedContext> onDataChanged;
+    public transient Consumer<ContextUtils.MenuItemContext> onScreenSlotChanged;
     public transient Consumer<ContextUtils.ContainerMenuContext> onMenuSlotChanged;
     public transient Consumer<ContextUtils.ContainerMenuContext> setMenuSlotChanged;
-    public transient Consumer<ContextUtils.ScreenRenderContext<T>> renderBg;
+    public transient Consumer<ContextUtils.ScreenRenderContext> renderBg;
     public transient Function<ContextUtils.PlayerIndexContext, Object> clickMenuButton;
     public transient Consumer<ContextUtils.SlotClickContext> onClicked;
     public transient Function<ContextUtils.ItemSlotContext, Object> setCanTakeItemForPickAll;
@@ -47,12 +56,9 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public transient Function<ContextUtils.MenuSlotContext, Object> canDragTo;
     public transient Consumer<ContextUtils.MenuItemStackContext> setCarried;
     public transient Function<T, Object> getCarried;
-    public transient Inventory playerInventory;
     public transient Boolean shouldCloseOnEsc;
     public transient Component narrationMessage;
     public transient Component title;
-    public transient Integer xSize;
-    public transient Integer ySize;
     public transient Function<ContextUtils.HasClickedOutsideContext, Object> hasClickedOutside;
     public transient Function<ContextUtils.MouseDraggedContext, Object> mouseDragged;
     public transient Function<ContextUtils.MouseClickedContext, Object> mouseReleased;
@@ -125,8 +131,8 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public transient Consumer<ContextUtils.LabelRenderContext> renderLabels;
     public transient Consumer<AbstractContainerScreen<?>> onClearDraggingState;
     public transient Consumer<AbstractContainerScreen<?>> clearDraggingState;
-    public transient Consumer<ContextUtils.ScreenRenderContext<T>> onRender;
-    public transient Consumer<ContextUtils.ScreenRenderContext<T>> render;
+    public transient Consumer<ContextUtils.ScreenRenderContext> onRender;
+    public transient Consumer<ContextUtils.ScreenRenderContext> render;
     private T menu;
 
     public AbstractMenuContainerBuilder(ResourceLocation i) {
@@ -526,12 +532,12 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> render(Consumer<ContextUtils.ScreenRenderContext<T>> arg) {
+    public AbstractMenuContainerBuilder<T> render(Consumer<ContextUtils.ScreenRenderContext> arg) {
         this.render = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onRender(Consumer<ContextUtils.ScreenRenderContext<T>> arg) {
+    public AbstractMenuContainerBuilder<T> onRender(Consumer<ContextUtils.ScreenRenderContext> arg) {
         this.onRender = arg;
         return this;
     }
@@ -601,22 +607,22 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> renderBg(Consumer<ContextUtils.ScreenRenderContext<T>> consumer) {
+    public AbstractMenuContainerBuilder<T> renderBg(Consumer<ContextUtils.ScreenRenderContext> consumer) {
         this.renderBg = consumer;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onScreenSlotChanged(Consumer<ContextUtils.MenuItemContext<T>> consumer) {
+    public AbstractMenuContainerBuilder<T> onScreenSlotChanged(Consumer<ContextUtils.MenuItemContext> consumer) {
         this.onScreenSlotChanged = consumer;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onDataChanged(Consumer<ContextUtils.DataChangedContext<T>> consumer) {
+    public AbstractMenuContainerBuilder<T> onDataChanged(Consumer<ContextUtils.DataChangedContext> consumer) {
         this.onDataChanged = consumer;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onScreenInit(Consumer<ContextUtils.ScreenBuilderContext<T>> init) {
+    public AbstractMenuContainerBuilder<T> onScreenInit(Consumer<ContextUtils.ScreenBuilderContext> init) {
         this.onScreenInit = init;
         return this;
     }
@@ -681,13 +687,4 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public T getMenu() {
         return menu;
     }
-
-    public Inventory getPlayerInventory() {
-        return playerInventory;
-    }
-
-    public void setPlayerInventory(Inventory playerInventory) {
-        this.playerInventory = playerInventory;
-    }
-
 }
