@@ -8,8 +8,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.Container;
@@ -259,6 +261,24 @@ public class ContextUtils {
             this.button = button;
         }
     }
+    public static class PlayDownSoundContext {
+        public final AbstractWidget widget;
+        public final SoundManager handler;
+
+        public PlayDownSoundContext(AbstractWidget widget, SoundManager handler) {
+            this.widget = widget;
+            this.handler = handler;
+        }
+    }
+    public static class SetFocusedContext {
+        public final AbstractWidget widget;
+        public final boolean focused;
+
+        public SetFocusedContext(AbstractWidget widget, boolean focused) {
+            this.widget = widget;
+            this.focused = focused;
+        }
+    }
 
     public static class MouseClickedContextW {
         public final AbstractWidget widget;
@@ -421,6 +441,127 @@ public class ContextUtils {
             this.mouseY = mouseY;
         }
     }
+    public static class MouseMovedContext {
+        public final AbstractWidget widget;
+        public final double mouseX;
+        public final double mouseY;
+
+        public MouseMovedContext(AbstractWidget widget, double mouseX, double mouseY) {
+            this.widget = widget;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+        }
+    }
+    public static class ClickedContextW {
+        public final AbstractWidget widget;
+        public final double mouseX;
+        public final double mouseY;
+
+        public ClickedContextW(AbstractWidget widget, double mouseX, double mouseY) {
+            this.widget = widget;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+        }
+    }
+    public static class IsMouseOverContextW {
+        public final AbstractWidget widget;
+        public final double mouseX;
+        public final double mouseY;
+
+        public IsMouseOverContextW(AbstractWidget widget, double mouseX, double mouseY) {
+            this.widget = widget;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+        }
+    }
+    public static class KeyPressedContextW {
+        public final AbstractWidget widget;
+        public final int keyCode;
+        public final int scanCode;
+        public final int modifiers;
+
+        public KeyPressedContextW(AbstractWidget widget, int keyCode, int scanCode, int modifiers) {
+            this.widget = widget;
+            this.keyCode = keyCode;
+            this.scanCode = scanCode;
+            this.modifiers = modifiers;
+        }
+    }
+    public static class KeyReleasedContextW {
+        public final AbstractWidget widget;
+        public final int keyCode;
+        public final int scanCode;
+        public final int modifiers;
+
+        public KeyReleasedContextW(AbstractWidget widget, int keyCode, int scanCode, int modifiers) {
+            this.widget = widget;
+            this.keyCode = keyCode;
+            this.scanCode = scanCode;
+            this.modifiers = modifiers;
+        }
+    }
+    public static class NextFocusPathContextW {
+        public final AbstractWidget widget;
+        public final FocusNavigationEvent event;
+
+        public NextFocusPathContextW(AbstractWidget widget, FocusNavigationEvent event) {
+            this.widget = widget;
+            this.event = event;
+        }
+    }
+
+    public static class CharTypedContextW {
+        public final AbstractWidget widget;
+        public final char codePoint;
+        public final int modifiers;
+
+        public CharTypedContextW(AbstractWidget widget, char codePoint, int modifiers) {
+            this.widget = widget;
+            this.codePoint = codePoint;
+            this.modifiers = modifiers;
+        }
+    }
+
+    public static class MouseScrolledContextW {
+        public final AbstractWidget widget;
+        public final double mouseX;
+        public final double mouseY;
+        public final double delta;
+
+        public MouseScrolledContextW(AbstractWidget widget, double mouseX, double mouseY, double delta) {
+            this.widget = widget;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+            this.delta = delta;
+        }
+    }
+
+    public static class IsHoveredOrFocusedContextW {
+        public final AbstractWidget widget;
+
+        public IsHoveredOrFocusedContextW(AbstractWidget widget) {
+            this.widget = widget;
+        }
+    }
+
+    public static class MouseDraggedContextW {
+        public final AbstractWidget widget;
+        public final double mouseX;
+        public final double mouseY;
+        public final int button;
+        public final double dragX;
+        public final double dragY;
+
+        public MouseDraggedContextW(AbstractWidget widget, double mouseX, double mouseY, int button, double dragX, double dragY) {
+            this.widget = widget;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+            this.button = button;
+            this.dragX = dragX;
+            this.dragY = dragY;
+        }
+    }
+
     public static class MouseMoveContext {
         public final AbstractContainerScreen<?> screen;
         public final double mouseX;

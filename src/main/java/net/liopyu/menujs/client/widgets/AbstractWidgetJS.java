@@ -110,12 +110,12 @@ public class AbstractWidgetJS extends AbstractWidget {
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         if (builder.mouseClicked != null) {
             try {
-                var context = new ContextUtils.MouseClickedContext(this, pMouseX, pMouseY, pButton);
+                var context = new ContextUtils.MouseClickedContextW(this, pMouseX, pMouseY, pButton);
                 var obj = convertObjectToDesired(builder.mouseClicked.apply(context), "boolean");
                 if (obj != null) {
                     return (boolean) obj;
                 }
-                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for mouseClicked from menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.mouseClicked(pMouseX, pMouseY, pButton));
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for mouseClicked from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.mouseClicked(pMouseX, pMouseY, pButton));
             } catch (Exception e) {
                 MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field mouseClicked: " + menuName() + ".", e);
             }
@@ -126,9 +126,17 @@ public class AbstractWidgetJS extends AbstractWidget {
 
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-        if (builder.onMouseReleased != null) {
-            var context = new ContextUtils.MouseClickedContextW(this, pMouseX, pMouseY, pButton);
-            consumerCallback(builder.onMouseReleased, context, "Error in " + menuName() + " builder for field: onMouseReleased.");
+        if (builder.mouseReleased != null) {
+            try {
+                var context = new ContextUtils.MouseClickedContextW(this, pMouseX, pMouseY, pButton);
+                var obj = convertObjectToDesired(builder.mouseReleased.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for mouseReleased from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.mouseReleased(pMouseX, pMouseY, pButton));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field mouseReleased: " + menuName() + ".", e);
+            }
         }
         return super.mouseReleased(pMouseX, pMouseY, pButton);
     }
@@ -136,193 +144,246 @@ public class AbstractWidgetJS extends AbstractWidget {
 
     @Override
     protected boolean isValidClickButton(int pButton) {
-        if (builder.onValidClickButton != null) {
-            var context = new ContextUtils.ValidClickButtonContext(this, pButton);
-            consumerCallback(builder.onValidClickButton, context, "Error in " + menuName() + " builder for field: onValidClickButton.");
+        if (builder.isValidClickButton != null) {
+            try {
+                var context = new ContextUtils.ValidClickButtonContext(this, pButton);
+                var obj = convertObjectToDesired(builder.isValidClickButton.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for isValidClickButton from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.isValidClickButton(pButton));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field isValidClickButton: " + menuName() + ".", e);
+            }
         }
         return super.isValidClickButton(pButton);
     }
 
 
+
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+        if (builder.mouseDragged != null) {
+            try {
+                var context = new ContextUtils.MouseDraggedContextW(this, pMouseX, pMouseY, pButton, pDragX, pDragY);
+                var obj = convertObjectToDesired(builder.mouseDragged.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for mouseDragged from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field mouseDragged: " + menuName() + ".", e);
+            }
+        }
         return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
     }
 
+
     @Override
     protected boolean clicked(double pMouseX, double pMouseY) {
+        if (builder.clicked != null) {
+            try {
+                var context = new ContextUtils.ClickedContextW(this, pMouseX, pMouseY);
+                var obj = convertObjectToDesired(builder.clicked.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for clicked from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.clicked(pMouseX, pMouseY));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field clicked: " + menuName() + ".", e);
+            }
+        }
         return super.clicked(pMouseX, pMouseY);
     }
+
 
     @Nullable
     @Override
     public ComponentPath nextFocusPath(FocusNavigationEvent pEvent) {
+        if (builder.nextFocusPath != null) {
+            try {
+                var context = new ContextUtils.NextFocusPathContextW(this, pEvent);
+                var obj = builder.nextFocusPath.apply(context);
+                if (obj instanceof ComponentPath path) {
+                    return path;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for nextFocusPath from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a ComponentPath. Defaulting to super method: " + super.nextFocusPath(pEvent));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field nextFocusPath: " + menuName() + ".", e);
+            }
+        }
         return super.nextFocusPath(pEvent);
     }
 
+
     @Override
     public boolean isMouseOver(double pMouseX, double pMouseY) {
+        if (builder.isMouseOver != null) {
+            try {
+                var context = new ContextUtils.IsMouseOverContextW(this, pMouseX, pMouseY);
+                var obj = convertObjectToDesired(builder.isMouseOver.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for isMouseOver from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.isMouseOver(pMouseX, pMouseY));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field isMouseOver: " + menuName() + ".", e);
+            }
+        }
         return super.isMouseOver(pMouseX, pMouseY);
     }
 
+
     @Override
     public void playDownSound(SoundManager pHandler) {
-        super.playDownSound(pHandler);
+        var context = new ContextUtils.PlayDownSoundContext(this, pHandler);
+        if (builder.onPlayDownSound != null) {
+            consumerCallback(builder.onPlayDownSound, context, "Error in " + menuName() + " builder for field: onPlayDownSound.");
+        }
+        if (builder.playDownSound != null) {
+            consumerCallback(builder.playDownSound, context, "Error in " + menuName() + " builder for field: playDownSound.");
+        } else {
+            super.playDownSound(pHandler);
+        }
     }
 
-    @Override
-    public int getWidth() {
-        return super.getWidth();
-    }
-
-    @Override
-    public void setWidth(int pWidth) {
-        super.setWidth(pWidth);
-    }
-
-    @Override
-    public void setHeight(int value) {
-        super.setHeight(value);
-    }
-
-    @Override
-    public void setAlpha(float pAlpha) {
-        super.setAlpha(pAlpha);
-    }
-
-    @Override
-    public void setMessage(Component pMessage) {
-        super.setMessage(pMessage);
-    }
-
-    @Override
-    public Component getMessage() {
-        return super.getMessage();
-    }
-
-    @Override
-    public boolean isFocused() {
-        return super.isFocused();
-    }
-
-    @Override
-    public boolean isHovered() {
-        return super.isHovered();
-    }
 
     @Override
     public boolean isHoveredOrFocused() {
+        if (builder.isHoveredOrFocused != null) {
+            try {
+                var context = new ContextUtils.IsHoveredOrFocusedContextW(this);
+                var obj = convertObjectToDesired(builder.isHoveredOrFocused.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for isHoveredOrFocused from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.isHoveredOrFocused());
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field isHoveredOrFocused: " + menuName() + ".", e);
+            }
+        }
         return super.isHoveredOrFocused();
     }
 
-    @Override
-    public boolean isActive() {
-        return super.isActive();
-    }
+
 
     @Override
     public void setFocused(boolean pFocused) {
-        super.setFocused(pFocused);
+        var context = new ContextUtils.SetFocusedContext(this, pFocused);
+        if (builder.onSetFocused != null) {
+            consumerCallback(builder.onSetFocused, context, "Error in " + menuName() + " builder for field: onSetFocused.");
+        }
+        if (builder.setFocused != null) {
+            consumerCallback(builder.setFocused, context, "Error in " + menuName() + " builder for field: setFocused.");
+        } else {
+            super.setFocused(pFocused);
+        }
     }
 
-    @Override
-    public int getFGColor() {
-        return super.getFGColor();
-    }
 
-    @Override
-    public void setFGColor(int color) {
-        super.setFGColor(color);
-    }
-
-    @Override
-    public void clearFGColor() {
-        super.clearFGColor();
-    }
-
-    @Override
-    public NarrationPriority narrationPriority() {
-        return super.narrationPriority();
-    }
-
-    @Override
-    protected void defaultButtonNarrationText(NarrationElementOutput pNarrationElementOutput) {
-        super.defaultButtonNarrationText(pNarrationElementOutput);
-    }
-
-    @Override
-    public int getX() {
-        return super.getX();
-    }
-
-    @Override
-    public void setX(int pX) {
-        super.setX(pX);
-    }
-
-    @Override
-    public int getY() {
-        return super.getY();
-    }
-
-    @Override
-    public void setY(int pY) {
-        super.setY(pY);
-    }
-
-    @Override
-    public void visitWidgets(Consumer<AbstractWidget> pConsumer) {
-        super.visitWidgets(pConsumer);
-    }
-
-    @Override
-    public ScreenRectangle getRectangle() {
-        return super.getRectangle();
-    }
-
-    @Override
-    public int getTabOrderGroup() {
-        return super.getTabOrderGroup();
-    }
-
-    @Override
-    public void setTabOrderGroup(int pTabOrderGroup) {
-        super.setTabOrderGroup(pTabOrderGroup);
-    }
 
     @Override
     public void mouseMoved(double pMouseX, double pMouseY) {
-        super.mouseMoved(pMouseX, pMouseY);
+        var context = new ContextUtils.MouseMovedContext(this, pMouseX, pMouseY);
+        if (builder.onMouseMoved != null) {
+            consumerCallback(builder.onMouseMoved, context, "Error in " + menuName() + " builder for field: onMouseMoved.");
+        }
+        if (builder.mouseMoved != null) {
+            consumerCallback(builder.mouseMoved, context, "Error in " + menuName() + " builder for field: mouseMoved.");
+        } else {
+            super.mouseMoved(pMouseX, pMouseY);
+        }
     }
+
 
     @Override
     public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+        if (builder.mouseScrolled != null) {
+            try {
+                var context = new ContextUtils.MouseScrolledContextW(this, pMouseX, pMouseY, pDelta);
+                var obj = convertObjectToDesired(builder.mouseScrolled.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for mouseScrolled from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.mouseScrolled(pMouseX, pMouseY, pDelta));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field mouseScrolled: " + menuName() + ".", e);
+            }
+        }
         return super.mouseScrolled(pMouseX, pMouseY, pDelta);
     }
 
+
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+        if (builder.keyPressed != null) {
+            try {
+                var context = new ContextUtils.KeyPressedContextW(this, pKeyCode, pScanCode, pModifiers);
+                var obj = convertObjectToDesired(builder.keyPressed.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for keyPressed from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.keyPressed(pKeyCode, pScanCode, pModifiers));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field keyPressed: " + menuName() + ".", e);
+            }
+        }
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
 
+
     @Override
     public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers) {
+        if (builder.keyReleased != null) {
+            try {
+                var context = new ContextUtils.KeyReleasedContextW(this, pKeyCode, pScanCode, pModifiers);
+                var obj = convertObjectToDesired(builder.keyReleased.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for keyReleased from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.keyReleased(pKeyCode, pScanCode, pModifiers));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field keyReleased: " + menuName() + ".", e);
+            }
+        }
         return super.keyReleased(pKeyCode, pScanCode, pModifiers);
     }
 
+
     @Override
     public boolean charTyped(char pCodePoint, int pModifiers) {
+        if (builder.charTyped != null) {
+            try {
+                var context = new ContextUtils.CharTypedContextW(this, pCodePoint, pModifiers);
+                var obj = convertObjectToDesired(builder.charTyped.apply(context), "boolean");
+                if (obj != null) {
+                    return (boolean) obj;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for charTyped from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a boolean. Defaulting to super method: " + super.charTyped(pCodePoint, pModifiers));
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field charTyped: " + menuName() + ".", e);
+            }
+        }
         return super.charTyped(pCodePoint, pModifiers);
     }
+
 
     @Nullable
     @Override
     public ComponentPath getCurrentFocusPath() {
+        if (builder.getCurrentFocusPath != null) {
+            try {
+                var obj = builder.getCurrentFocusPath.apply(this);
+                if (obj instanceof ComponentPath path) {
+                    return path;
+                }
+                MenuJSHelperClass.logErrorMessageOnce("Invalid return value for getCurrentFocusPath from widget builder in menu: " + menuName() + ". Value: " + obj + ". Must be a ComponentPath. Defaulting to super method: " + super.getCurrentFocusPath());
+            } catch (Exception e) {
+                MenuJSHelperClass.logErrorMessageOnceCatchable("Error in menu builder for field getCurrentFocusPath: " + menuName() + ".", e);
+            }
+        }
         return super.getCurrentFocusPath();
     }
 
-    @Override
-    public void setPosition(int pX, int pY) {
-        super.setPosition(pX, pY);
-    }
+
 }
