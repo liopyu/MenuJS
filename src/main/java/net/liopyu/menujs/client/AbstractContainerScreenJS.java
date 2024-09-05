@@ -1,12 +1,14 @@
 package net.liopyu.menujs.client;
 
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
+import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -50,6 +52,9 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
         super(pMenu, pPlayerInventory, pTitle);
         this.builder = builder;
         this.playerInventory = pPlayerInventory;
+        for (AbstractWidget widget : builder.renderableWidgets) {
+            this.addRenderableWidget(widget);
+        }
     }
 
     public AbstractMenuContainerBuilder<T> getBuilder() {
@@ -63,7 +68,7 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     protected void init() {
         super.init();
         this.menu.addSlotListener(this);
-        var context = new ContextUtils.ScreenBuilderContext<>(this,builder,getMenu(),getPlayerInventory(),getTitle());
+        var context = new ContextUtils.ScreenBuilderContext<>(this, builder, getMenu(), getPlayerInventory(), getTitle());
         consumerCallback(builder.onScreenInit, context, "Error in " + menuName() + "builder for field: onScreenInit.");
     }
 
@@ -71,13 +76,15 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
         super.removed();
         this.menu.removeSlotListener(this);
     }
-    public String menuName(){
+
+    public String menuName() {
         return this.builder.id.toString();
     }
+
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
         if (builder.renderBg != null) {
-            final ContextUtils.ScreenRenderContext<T> context = new ContextUtils.ScreenRenderContext<>(this,guiGraphics,v,i,i1);
+            final ContextUtils.ScreenRenderContext<T> context = new ContextUtils.ScreenRenderContext<>(this, guiGraphics, v, i, i1);
             consumerCallback(builder.renderBg, context, "Error in " + menuName() + "builder for field: renderBg.");
         }
     }
@@ -85,7 +92,7 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     @Override
     public void slotChanged(AbstractContainerMenu abstractContainerMenu, int i, ItemStack itemStack) {
         if (builder.onScreenSlotChanged != null) {
-            final ContextUtils.MenuItemContext<T> context = new ContextUtils.MenuItemContext<>(this,getMenu(),i,itemStack);
+            final ContextUtils.MenuItemContext<T> context = new ContextUtils.MenuItemContext<>(this, getMenu(), i, itemStack);
             consumerCallback(builder.onScreenSlotChanged, context, "Error in " + menuName() + "builder for field: onScreenSlotChanged.");
         }
     }
@@ -93,17 +100,17 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     @Override
     public void dataChanged(AbstractContainerMenu abstractContainerMenu, int i, int i1) {
         if (builder.onDataChanged != null) {
-            final ContextUtils.DataChangedContext<T> context = new ContextUtils.DataChangedContext<>(getMenu(),this,i,i1);
+            final ContextUtils.DataChangedContext<T> context = new ContextUtils.DataChangedContext<>(getMenu(), this, i, i1);
             consumerCallback(builder.onDataChanged, context, "Error in " + menuName() + "builder for field: onDataChanged.");
         }
     }
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        var context = new ContextUtils.ScreenRenderContext<>(this,pGuiGraphics,pPartialTick,pMouseX,pMouseY);
+        var context = new ContextUtils.ScreenRenderContext<>(this, pGuiGraphics, pPartialTick, pMouseX, pMouseY);
         if (builder.render != null) {
             consumerCallback(builder.render, context, "Error in " + menuName() + "builder for field: render.");
-        }else super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+        } else super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         if (builder.onRender != null) {
             consumerCallback(builder.onRender, context, "Error in " + menuName() + "builder for field: onRender.");
         }
@@ -128,7 +135,7 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     protected List<Component> getTooltipFromContainerItem(ItemStack pStack) {
         if (builder.setTooltipFromContainerItem != null) {
             try {
-                var context = new ContextUtils.ItemScreenContext(this,pStack);
+                var context = new ContextUtils.ItemScreenContext(this, pStack);
                 var obj = convertObjectToDesired(builder.setTooltipFromContainerItem.apply(context), "list");
                 if (obj != null) {
                     return (List<Component>) obj;
@@ -228,7 +235,6 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     }
 
 
-
     @Override
     public void clearDraggingState() {
         if (builder.clearDraggingState != null) {
@@ -241,7 +247,6 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
             consumerCallback(builder.onClearDraggingState, this, "Error in " + menuName() + "builder for field: onClearDraggingState.");
         }
     }
-
 
 
     @Override
@@ -328,7 +333,6 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
         }
         return super.isPauseScreen();
     }
-
 
 
     @Override
@@ -454,7 +458,7 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
 
         if (builder.setInitialFocus != null) {
             consumerCallback(builder.setInitialFocus, context, "Error in " + menuName() + "builder for field: setInitialFocus.");
-        }else {
+        } else {
             super.setInitialFocus(pListener);
         }
     }
@@ -484,10 +488,6 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     }
 
 
-
-   /* protected  addRenderableWidget(t pWidget) {
-        return super.addRenderableWidget(pWidget);
-    }*/
     @Override
     protected <t extends GuiEventListener & Renderable & NarratableEntry> t addRenderableWidget(t pWidget) {
         return super.addRenderableWidget(pWidget);
@@ -601,7 +601,6 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     }
 
 
-
     @Override
     public void renderDirtBackground(GuiGraphics pGuiGraphics) {
         var context = new ContextUtils.RenderBackgroundContext(this, pGuiGraphics);
@@ -616,7 +615,6 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
             consumerCallback(builder.onRenderDirtBackground, context, "Error in " + menuName() + "builder for field: onRenderDirtBackground.");
         }
     }
-
 
 
     @Override
@@ -673,7 +671,6 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
             consumerCallback(builder.filesDrop, context, "Error in " + menuName() + "builder for field: filesDrop.");
         }
     }
-
 
 
     @Override
@@ -813,7 +810,6 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     }
 
 
-
     @Override
     public ScreenRectangle getRectangle() {
         return super.getRectangle();
@@ -830,22 +826,6 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     public GuiEventListener getFocused() {
         return super.getFocused();
     }
-
-    @Override
-    public void setFocused(@Nullable GuiEventListener pListener) {
-        var context = new ContextUtils.RemoveWidgetContext(this, pListener);
-
-        if (builder.setFocused != null) {
-            consumerCallback(builder.setFocused, context, "Error in " + menuName() + "builder for field: setFocused.");
-        } else {
-            super.setFocused(pListener);
-        }
-
-        if (builder.onSetFocused != null) {
-            consumerCallback(builder.onSetFocused, context, "Error in " + menuName() + "builder for field: onSetFocused.");
-        }
-    }
-
 
     @Override
     public Optional<GuiEventListener> getChildAt(double pMouseX, double pMouseY) {
@@ -867,10 +847,24 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
         return super.charTyped(pCodePoint, pModifiers);
     }
 
-
     @Override
     public boolean isFocused() {
         return super.isFocused();
+    }
+
+    @Override
+    public void setFocused(@Nullable GuiEventListener pListener) {
+        var context = new ContextUtils.RemoveWidgetContext(this, pListener);
+
+        if (builder.setFocused != null) {
+            consumerCallback(builder.setFocused, context, "Error in " + menuName() + "builder for field: setFocused.");
+        } else {
+            super.setFocused(pListener);
+        }
+
+        if (builder.onSetFocused != null) {
+            consumerCallback(builder.onSetFocused, context, "Error in " + menuName() + "builder for field: onSetFocused.");
+        }
     }
 
     @Nullable
