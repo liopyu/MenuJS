@@ -27,6 +27,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         super(pMenuType, pContainerId);
         this.builder = builder;
         this.playerInventory = playerInventory;
+        builder.setMenu(this);
         if (builder.onMenuInit != null) {
             var context = new ContextUtils.MenuBuilderContext<>(builder, pMenuType, pContainerId, playerInventory);
             consumerCallback(builder.onMenuInit, context, "Error in " + menuName() + "builder for field: onMenuInit.");

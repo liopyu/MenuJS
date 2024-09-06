@@ -19,13 +19,15 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMenu> extends BuilderBase<MenuType<T>> {
-    public static List<AbstractMenuContainerBuilder<?>> thisList = new ArrayList<>();
+    public static Map<ResourceLocation, AbstractMenuContainerBuilder<?>> thisList = new HashMap<>();
     public final List<Slot> slotList = new ArrayList<>();
     public final List<ContainerData> containerSlotList = new ArrayList<>();
     public final List<DataSlot> dataSlotList = new ArrayList<>();
@@ -133,11 +135,11 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public transient Consumer<AbstractContainerScreen<?>> clearDraggingState;
     public transient Consumer<ContextUtils.ScreenRenderContext> onRender;
     public transient Consumer<ContextUtils.ScreenRenderContext> render;
-    private T menu;
+    private AbstractContainerMenu menu;
 
     public AbstractMenuContainerBuilder(ResourceLocation i) {
         super(i);
-        thisList.add(this);
+        thisList.put(i, this);
     }
 
     public AbstractMenuContainerBuilder<T> newRenderableWidget(int x, int y, int width, int height, Component message, Consumer<AbstractWidgetBuilder> widgetBuilder) {
@@ -684,7 +686,12 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         return RegistryInfo.MENU;
     }
 
-    public T getMenu() {
+    public AbstractContainerMenu getMenu() {
         return menu;
     }
+
+    public void setMenu(AbstractContainerMenu menu) {
+        this.menu = menu;
+    }
+
 }

@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "menujs.refmap.json",
   "mixins": [
-    "KubeJSCommandsMixin"
+    "KubeJSCommandsMixin",
+    "ServerPlayerMixin"
   ],
   "client": [
   ],

@@ -1,9 +1,6 @@
 package net.liopyu.menujs.client;
 
-import dev.latvian.mods.kubejs.util.ConsoleJS;
 import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
-import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
-import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -12,7 +9,6 @@ import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -54,7 +50,71 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
         super(pMenu, pPlayerInventory, pTitle);
         this.builder = builder;
         this.playerInventory = pPlayerInventory;
+    }
 
+    public void setImageWidth(int imageWidth) {
+        this.imageWidth = imageWidth;
+    }
+
+    public void setImageHeight(int imageHeight) {
+        this.imageHeight = imageHeight;
+    }
+
+    public int getImageWidth() {
+        return imageWidth;
+    }
+
+    public int getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setTopPos(int topPos) {
+        this.topPos = topPos;
+    }
+
+    public int getTopPos() {
+        return topPos;
+    }
+
+    public void setLeftPos(int leftPos) {
+        this.leftPos = leftPos;
+    }
+
+    public int getLeftPos() {
+        return leftPos;
+    }
+
+
+    public void setInventoryLabelY(int i) {
+        inventoryLabelY = i;
+    }
+
+    public void setInventoryLabelX(int i) {
+        inventoryLabelX = i;
+    }
+
+    public int getInventoryLabelY() {
+        return inventoryLabelY;
+    }
+
+    public int getInventoryLabelX() {
+        return inventoryLabelX;
+    }
+
+    public void setTitleLabelY(int i) {
+        titleLabelY = i;
+    }
+
+    public void setTitleLabelX(int i) {
+        titleLabelX = i;
+    }
+
+    public int getTitleLabelY() {
+        return titleLabelY;
+    }
+
+    public int getTitleLabelX() {
+        return titleLabelX;
     }
 
     public AbstractMenuContainerBuilder<T> getBuilder() {
