@@ -235,12 +235,14 @@ public class ContextUtils {
     }
 
     public static class MenuBuilderContext<T extends AbstractContainerMenu> {
+        public final AbstractContainerMenu menu;
         public final AbstractMenuContainerBuilder<T> builder;
         public final @Nullable MenuType<?> pMenuType;
         public final int pContainerId;
         public final Inventory playerInventory;
 
-        public MenuBuilderContext(AbstractMenuContainerBuilder<T> builder, @Nullable MenuType<?> pMenuType, int pContainerId, Inventory playerInventory) {
+        public MenuBuilderContext(AbstractContainerMenu menu, AbstractMenuContainerBuilder<T> builder, @Nullable MenuType<?> pMenuType, int pContainerId, Inventory playerInventory) {
+            this.menu = menu;
             this.builder = builder;
             this.pMenuType = pMenuType;
             this.pContainerId = pContainerId;

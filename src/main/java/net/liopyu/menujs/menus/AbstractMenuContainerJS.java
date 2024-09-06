@@ -1,10 +1,12 @@
 package net.liopyu.menujs.menus;
 
+import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
 import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -29,7 +31,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         this.playerInventory = playerInventory;
         builder.setMenu(this);
         if (builder.onMenuInit != null) {
-            var context = new ContextUtils.MenuBuilderContext<>(builder, pMenuType, pContainerId, playerInventory);
+            var context = new ContextUtils.MenuBuilderContext<>(this, builder, pMenuType, pContainerId, playerInventory);
             consumerCallback(builder.onMenuInit, context, "Error in " + menuName() + "builder for field: onMenuInit.");
         }
         for (Slot slot : builder.slotList) {
@@ -53,6 +55,15 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
 
     public String menuName() {
         return this.builder.id.toString();
+    }
+
+    public Slot addSlot(int pSlot, int pX, int pY) {
+        if (builder.container == null) {
+            builder.setContainer();
+        }
+        var slot = new Slot(builder.container, pSlot, pX, pY);
+        builder.slotList.add(slot);
+        return slot;
     }
 
     @Override
@@ -86,6 +97,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         }
         return false;
     }
+
 
     @Override
     public boolean isValidSlotIndex(int pSlotIndex) {
@@ -193,7 +205,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
     }
 
     @Override
-    protected boolean moveItemStackTo(ItemStack pStack, int pStartIndex, int pEndIndex, boolean pReverseDirection) {
+    public boolean moveItemStackTo(ItemStack pStack, int pStartIndex, int pEndIndex, boolean pReverseDirection) {
         if (builder.moveItemStackTo != null) {
             try {
                 var context = new ContextUtils.TransferStackContext(this, pStack, pStartIndex, pEndIndex, pReverseDirection);

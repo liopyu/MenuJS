@@ -12,6 +12,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
@@ -36,7 +37,7 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public Integer xSize;
     @HideFromJS
     public Integer ySize;
-    public transient SimpleContainer container;
+    public SimpleContainer container;
     public transient Function<ContextUtils.PlayerIndexContext, Object> setQuickMoveStack;
     public transient Function<ContextUtils.PlayerMenuContext, Object> setStillValid;
     public transient Function<ContextUtils.IndexContext, Object> isValidSlotIndex;
@@ -140,6 +141,7 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public AbstractMenuContainerBuilder(ResourceLocation i) {
         super(i);
         thisList.put(i, this);
+        this.setStillValid = t -> true;
     }
 
     public AbstractMenuContainerBuilder<T> newRenderableWidget(int x, int y, int width, int height, Component message, Consumer<AbstractWidgetBuilder> widgetBuilder) {
@@ -644,19 +646,29 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         return this;
     }
 
-    public void setContainer() {
+    public SimpleContainer getContainer() {
+        return container;
+    }
+
+    public AbstractMenuContainerBuilder<T> setContainer() {
         this.container = new SimpleContainer();
+        return this;
     }
 
-    public void setContainer(int pSize) {
+    public AbstractMenuContainerBuilder<T> setContainer(int pSize) {
         this.container = new SimpleContainer(pSize);
+        return this;
     }
-
-    public void setContainer(ItemStack... pItems) {
+/*
+    public AbstractMenuContainerBuilder<T> setContainer(ItemStack... pItems) {
         this.container = new SimpleContainer(pItems);
-    }
+        return this;
+    }*/
 
     public AbstractMenuContainerBuilder<T> addSlot(int pSlot, int pX, int pY) {
+        if (this.container == null) {
+            this.setContainer();
+        }
         this.slotList.add(new Slot(this.container, pSlot, pX, pY));
         return this;
     }

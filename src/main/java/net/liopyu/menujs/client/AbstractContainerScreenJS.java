@@ -147,9 +147,9 @@ public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends 
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
+    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         if (builder.renderBg != null) {
-            final ContextUtils.ScreenRenderContext context = new ContextUtils.ScreenRenderContext(this, guiGraphics, v, i, i1);
+            final ContextUtils.ScreenRenderContext context = new ContextUtils.ScreenRenderContext(this, guiGraphics, partialTick, mouseX, mouseY);
             consumerCallback(builder.renderBg, context, "Error in " + menuName() + "builder for field: renderBg.");
         }
     }

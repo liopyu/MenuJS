@@ -1,7 +1,8 @@
 package net.liopyu.menujs.events;
 
 import net.liopyu.menujs.MenuJS;
-import net.liopyu.menujs.util.IServerPlayer;
+import net.liopyu.menujs.util.IPlayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -16,8 +17,8 @@ public class TestForgeEvent {
     public static void rightClick(PlayerInteractEvent.RightClickItem event) {
         if (!event.getLevel().isClientSide() && event.getItemStack().getItem() == Items.DIAMOND) {
             if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-                if (serverPlayer instanceof IServerPlayer iServerPlayer) {
-                    iServerPlayer.menuJS$setScreen(serverPlayer, "kubejs:test");
+                if (serverPlayer instanceof IPlayer iServerPlayer) {
+                    iServerPlayer.menuJS$setScreen(new ResourceLocation("kubejs:test"));
                 }
             }
         }

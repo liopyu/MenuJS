@@ -60,6 +60,7 @@ public class AbstractWidgetJS extends AbstractWidget {
             final ContextUtils.ScreenRenderContextW context = new ContextUtils.ScreenRenderContextW(this, guiGraphics, v, i, i1);
             consumerCallback(builder.renderWidget, context, "Error in " + menuName() + "builder for field: renderWidget.");
         }
+        
     }
 
 

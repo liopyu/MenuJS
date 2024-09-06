@@ -6,7 +6,7 @@
   "refmap": "menujs.refmap.json",
   "mixins": [
     "KubeJSCommandsMixin",
-    "ServerPlayerMixin"
+    "PlayerMixin"
   ],
   "client": [
   ],
