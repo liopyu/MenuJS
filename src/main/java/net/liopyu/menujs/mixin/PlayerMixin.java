@@ -1,7 +1,7 @@
 package net.liopyu.menujs.mixin;
 
 import dev.latvian.mods.kubejs.util.UtilsJS;
-import net.liopyu.menujs.menus.AbstractMenuContainerJS;
+import net.liopyu.menujs.menus.menujs.AbstractMenuContainerJS;
 import net.liopyu.menujs.util.IPlayer;
 import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.network.chat.Component;
@@ -13,7 +13,8 @@ import net.minecraftforge.network.NetworkHooks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-import static net.liopyu.menujs.builders.AbstractMenuContainerBuilder.thisList;
+import static net.liopyu.menujs.builders.AbstractContainerBuilder.thisList;
+import static net.liopyu.menujs.builders.AbstractMenuTypeJS.getMenuForBuilder;
 
 @Mixin(value = Player.class, remap = true)
 public class PlayerMixin implements IPlayer {
@@ -26,7 +27,7 @@ public class PlayerMixin implements IPlayer {
         if (builder != null) {
             if (menuJS$Player instanceof ServerPlayer serverPlayer) {
                 NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider(
-                        (id, inv, p) -> new AbstractMenuContainerJS(UtilsJS.cast(builder), builder.get(), id, inv),
+                        (id, inv, p) -> getMenuForBuilder(builder, id, inv),
                         Component.empty()
                 ));
             } else {

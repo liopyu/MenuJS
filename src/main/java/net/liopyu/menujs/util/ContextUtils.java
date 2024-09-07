@@ -1,8 +1,7 @@
 package net.liopyu.menujs.util;
 
-import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
-import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
-import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
+import net.liopyu.menujs.builders.AbstractContainerBuilder;
+import net.liopyu.menujs.builders.widget.AbstractWidgetBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
@@ -236,12 +235,12 @@ public class ContextUtils {
 
     public static class MenuBuilderContext<T extends AbstractContainerMenu> {
         public final AbstractContainerMenu menu;
-        public final AbstractMenuContainerBuilder<T> builder;
+        public final AbstractContainerBuilder<T> builder;
         public final @Nullable MenuType<?> pMenuType;
         public final int pContainerId;
         public final Inventory playerInventory;
 
-        public MenuBuilderContext(AbstractContainerMenu menu, AbstractMenuContainerBuilder<T> builder, @Nullable MenuType<?> pMenuType, int pContainerId, Inventory playerInventory) {
+        public MenuBuilderContext(AbstractContainerMenu menu, AbstractContainerBuilder<T> builder, @Nullable MenuType<?> pMenuType, int pContainerId, Inventory playerInventory) {
             this.menu = menu;
             this.builder = builder;
             this.pMenuType = pMenuType;
@@ -251,13 +250,13 @@ public class ContextUtils {
     }
 
     public static class ScreenBuilderContext {
-        public final AbstractMenuContainerBuilder<? extends AbstractContainerMenu> builder;
+        public final AbstractContainerBuilder<? extends AbstractContainerMenu> builder;
         public final AbstractContainerScreen<? extends AbstractContainerMenu> screen;
         public final AbstractContainerMenu menu;
         public final Inventory playerInventory;
         public final Component title;
 
-        public ScreenBuilderContext(AbstractContainerScreen<? extends AbstractContainerMenu> screen, AbstractMenuContainerBuilder<? extends AbstractContainerMenu> builder, AbstractContainerMenu menu, Inventory playerInventory, Component title) {
+        public ScreenBuilderContext(AbstractContainerScreen<? extends AbstractContainerMenu> screen, AbstractContainerBuilder<? extends AbstractContainerMenu> builder, AbstractContainerMenu menu, Inventory playerInventory, Component title) {
 
             this.builder = builder;
             this.screen = screen;
@@ -737,14 +736,14 @@ public class ContextUtils {
 
     public static class WidgetInitContext {
         public final AbstractWidgetBuilder builder;
-        public final AbstractMenuContainerBuilder<?> menuBuilder;
+        public final AbstractContainerBuilder<?> menuBuilder;
         public final int x;
         public final int y;
         public final int width;
         public final int height;
         public final Component message;
 
-        public WidgetInitContext(AbstractWidgetBuilder builder, AbstractMenuContainerBuilder<?> menuBuilder, int x, int y, int width, int height, Component message) {
+        public WidgetInitContext(AbstractWidgetBuilder builder, AbstractContainerBuilder<?> menuBuilder, int x, int y, int width, int height, Component message) {
             this.builder = builder;
             this.menuBuilder = menuBuilder;
             this.x = x;

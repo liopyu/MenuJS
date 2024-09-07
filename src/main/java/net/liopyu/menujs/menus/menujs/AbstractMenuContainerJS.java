@@ -1,12 +1,10 @@
-package net.liopyu.menujs.menus;
+package net.liopyu.menujs.menus.menujs;
 
-import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
-import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
+import net.liopyu.menujs.builders.menu.menujs.AbstractContainerBuilderJS;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -22,14 +20,13 @@ import static net.liopyu.menujs.util.MenuJSHelperClass.convertObjectToDesired;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class AbstractMenuContainerJS extends AbstractContainerMenu {
-    private final AbstractMenuContainerBuilderJS builder;
+    private final AbstractContainerBuilderJS builder;
     private final Inventory playerInventory;
 
-    public AbstractMenuContainerJS(AbstractMenuContainerBuilderJS builder, @Nullable MenuType<?> pMenuType, int pContainerId, Inventory playerInventory) {
+    public AbstractMenuContainerJS(AbstractContainerBuilderJS builder, @Nullable MenuType<?> pMenuType, int pContainerId, Inventory playerInventory) {
         super(pMenuType, pContainerId);
         this.builder = builder;
         this.playerInventory = playerInventory;
-        builder.setMenu(this);
         if (builder.onMenuInit != null) {
             var context = new ContextUtils.MenuBuilderContext<>(this, builder, pMenuType, pContainerId, playerInventory);
             consumerCallback(builder.onMenuInit, context, "Error in " + menuName() + "builder for field: onMenuInit.");
@@ -45,7 +42,7 @@ public class AbstractMenuContainerJS extends AbstractContainerMenu {
         }
     }
 
-    public AbstractMenuContainerBuilderJS getBuilder() {
+    public AbstractContainerBuilderJS getBuilder() {
         return builder;
     }
 

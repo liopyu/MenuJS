@@ -2,23 +2,23 @@ package net.liopyu.menujs.builders;
 
 import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
+import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
-import net.liopyu.menujs.builders.container.AbstractMenuContainerBuilderJS;
-import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
-import net.liopyu.menujs.client.widgets.AbstractWidgetJS;
+import net.liopyu.menujs.builders.menu.menujs.AbstractContainerBuilderJS;
+import net.liopyu.menujs.builders.menu.vanilla.ChestMenuBuilderJS;
+import net.liopyu.menujs.builders.widget.AbstractWidgetBuilder;
+import net.liopyu.menujs.client.screens.menujs.AbstractContainerScreenJS;
+import net.liopyu.menujs.client.screens.vanilla.ChestMenuScreenJS;
+import net.liopyu.menujs.menus.menujs.AbstractMenuContainerJS;
 import net.liopyu.menujs.util.ContextUtils;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +27,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
-public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMenu> extends BuilderBase<MenuType<T>> {
-    public static Map<ResourceLocation, AbstractMenuContainerBuilder<?>> thisList = new HashMap<>();
+public abstract class AbstractContainerBuilder<T extends AbstractContainerMenu> extends BuilderBase<MenuType<T>> {
+    public static Map<ResourceLocation, AbstractContainerBuilder<?>> thisList = new HashMap<>();
     public final List<Slot> slotList = new ArrayList<>();
     public final List<ContainerData> containerSlotList = new ArrayList<>();
     public final List<DataSlot> dataSlotList = new ArrayList<>();
@@ -136,512 +136,512 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
     public transient Consumer<AbstractContainerScreen<?>> clearDraggingState;
     public transient Consumer<ContextUtils.ScreenRenderContext> onRender;
     public transient Consumer<ContextUtils.ScreenRenderContext> render;
-    private AbstractContainerMenu menu;
+    private T menu;
 
-    public AbstractMenuContainerBuilder(ResourceLocation i) {
+    public AbstractContainerBuilder(ResourceLocation i) {
         super(i);
         thisList.put(i, this);
         this.setStillValid = t -> true;
     }
 
-    public AbstractMenuContainerBuilder<T> newRenderableWidget(int x, int y, int width, int height, Component message, Consumer<AbstractWidgetBuilder> widgetBuilder) {
+    public AbstractContainerBuilder<T> newRenderableWidget(int x, int y, int width, int height, Component message, Consumer<AbstractWidgetBuilder> widgetBuilder) {
         var WBuilder = new AbstractWidgetBuilder(this);
         widgetBuilder.accept(WBuilder);
         renderableWidgets.add(WBuilder.build(x, y, width, height, message));
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setShouldCloseOnEsc(boolean shouldClose) {
+    public AbstractContainerBuilder<T> setShouldCloseOnEsc(boolean shouldClose) {
         this.shouldCloseOnEsc = shouldClose;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setNarrationMessage(Component narrationMessage) {
+    public AbstractContainerBuilder<T> setNarrationMessage(Component narrationMessage) {
         this.narrationMessage = narrationMessage;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setTitle(Component title) {
+    public AbstractContainerBuilder<T> setTitle(Component title) {
         this.title = title;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setXSize(int size) {
+    public AbstractContainerBuilder<T> setXSize(int size) {
         this.xSize = size;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setYSize(int size) {
+    public AbstractContainerBuilder<T> setYSize(int size) {
         this.ySize = size;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> hasClickedOutside(Function<ContextUtils.HasClickedOutsideContext, Object> arg) {
+    public AbstractContainerBuilder<T> hasClickedOutside(Function<ContextUtils.HasClickedOutsideContext, Object> arg) {
         this.hasClickedOutside = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> mouseDragged(Function<ContextUtils.MouseDraggedContext, Object> arg) {
+    public AbstractContainerBuilder<T> mouseDragged(Function<ContextUtils.MouseDraggedContext, Object> arg) {
         this.mouseDragged = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> mouseReleased(Function<ContextUtils.MouseClickedContext, Object> arg) {
+    public AbstractContainerBuilder<T> mouseReleased(Function<ContextUtils.MouseClickedContext, Object> arg) {
         this.mouseReleased = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> isHovering(Function<ContextUtils.IsHoveringContext, Object> arg) {
+    public AbstractContainerBuilder<T> isHovering(Function<ContextUtils.IsHoveringContext, Object> arg) {
         this.isHovering = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> keyPressed(Function<ContextUtils.KeyPressedContext, Object> arg) {
+    public AbstractContainerBuilder<T> keyPressed(Function<ContextUtils.KeyPressedContext, Object> arg) {
         this.keyPressed = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> checkHotbarKeyPressed(Function<ContextUtils.CheckHotbarKeyPressedContext, Object> arg) {
+    public AbstractContainerBuilder<T> checkHotbarKeyPressed(Function<ContextUtils.CheckHotbarKeyPressedContext, Object> arg) {
         this.checkHotbarKeyPressed = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> isPauseScreen(Function<AbstractContainerScreen<?>, Object> arg) {
+    public AbstractContainerBuilder<T> isPauseScreen(Function<AbstractContainerScreen<?>, Object> arg) {
         this.isPauseScreen = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> getSlotUnderMouse(Function<AbstractContainerScreen<?>, Object> arg) {
+    public AbstractContainerBuilder<T> getSlotUnderMouse(Function<AbstractContainerScreen<?>, Object> arg) {
         this.getSlotUnderMouse = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> getGuiLeft(Function<AbstractContainerScreen<?>, Object> arg) {
+    public AbstractContainerBuilder<T> getGuiLeft(Function<AbstractContainerScreen<?>, Object> arg) {
         this.getGuiLeft = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> getGuiTop(Function<AbstractContainerScreen<?>, Object> arg) {
+    public AbstractContainerBuilder<T> getGuiTop(Function<AbstractContainerScreen<?>, Object> arg) {
         this.getGuiTop = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> mouseClicked(Function<ContextUtils.MouseClickedContext, Object> arg) {
+    public AbstractContainerBuilder<T> mouseClicked(Function<ContextUtils.MouseClickedContext, Object> arg) {
         this.mouseClicked = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setTooltipFromContainerItem(Function<ContextUtils.ItemScreenContext, Object> arg) {
+    public AbstractContainerBuilder<T> setTooltipFromContainerItem(Function<ContextUtils.ItemScreenContext, Object> arg) {
         this.setTooltipFromContainerItem = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onSetInitialFocus(Consumer<ContextUtils.InitialFocusContext> arg) {
+    public AbstractContainerBuilder<T> onSetInitialFocus(Consumer<ContextUtils.InitialFocusContext> arg) {
         this.onSetInitialFocus = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setInitialFocus(Consumer<ContextUtils.InitialFocusContext> arg) {
+    public AbstractContainerBuilder<T> setInitialFocus(Consumer<ContextUtils.InitialFocusContext> arg) {
         this.setInitialFocus = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onClearWidgets(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onClearWidgets(Consumer<AbstractContainerScreen<?>> arg) {
         this.onClearWidgets = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> clearWidgets(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> clearWidgets(Consumer<AbstractContainerScreen<?>> arg) {
         this.clearWidgets = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> insertText(Consumer<ContextUtils.InsertTextContext> arg) {
+    public AbstractContainerBuilder<T> insertText(Consumer<ContextUtils.InsertTextContext> arg) {
         this.insertText = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onInsertText(Consumer<ContextUtils.InsertTextContext> arg) {
+    public AbstractContainerBuilder<T> onInsertText(Consumer<ContextUtils.InsertTextContext> arg) {
         this.onInsertText = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> rebuildWidgets(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> rebuildWidgets(Consumer<AbstractContainerScreen<?>> arg) {
         this.rebuildWidgets = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onRebuildWidgets(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onRebuildWidgets(Consumer<AbstractContainerScreen<?>> arg) {
         this.onRebuildWidgets = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> added(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> added(Consumer<AbstractContainerScreen<?>> arg) {
         this.added = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onAdded(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onAdded(Consumer<AbstractContainerScreen<?>> arg) {
         this.onAdded = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onRemoveWidget(Consumer<ContextUtils.RemoveWidgetContext> arg) {
+    public AbstractContainerBuilder<T> onRemoveWidget(Consumer<ContextUtils.RemoveWidgetContext> arg) {
         this.onRemoveWidget = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> removeWidget(Consumer<ContextUtils.RemoveWidgetContext> arg) {
+    public AbstractContainerBuilder<T> removeWidget(Consumer<ContextUtils.RemoveWidgetContext> arg) {
         this.removeWidget = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onChangeFocus(Consumer<ContextUtils.FocusChangeContext> arg) {
+    public AbstractContainerBuilder<T> onChangeFocus(Consumer<ContextUtils.FocusChangeContext> arg) {
         this.onChangeFocus = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> changeFocus(Consumer<ContextUtils.FocusChangeContext> arg) {
+    public AbstractContainerBuilder<T> changeFocus(Consumer<ContextUtils.FocusChangeContext> arg) {
         this.changeFocus = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> renderBackground(Consumer<ContextUtils.RenderBackgroundContext> arg) {
+    public AbstractContainerBuilder<T> renderBackground(Consumer<ContextUtils.RenderBackgroundContext> arg) {
         this.renderBackground = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> resize(Consumer<ContextUtils.ResizeContext> arg) {
+    public AbstractContainerBuilder<T> resize(Consumer<ContextUtils.ResizeContext> arg) {
         this.resize = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onResize(Consumer<ContextUtils.ResizeContext> arg) {
+    public AbstractContainerBuilder<T> onResize(Consumer<ContextUtils.ResizeContext> arg) {
         this.onResize = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onFilesDrop(Consumer<ContextUtils.FilesDropContext> arg) {
+    public AbstractContainerBuilder<T> onFilesDrop(Consumer<ContextUtils.FilesDropContext> arg) {
         this.onFilesDrop = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> filesDrop(Consumer<ContextUtils.FilesDropContext> arg) {
+    public AbstractContainerBuilder<T> filesDrop(Consumer<ContextUtils.FilesDropContext> arg) {
         this.filesDrop = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> afterMouseAction(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> afterMouseAction(Consumer<AbstractContainerScreen<?>> arg) {
         this.afterMouseAction = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onAfterMouseAction(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onAfterMouseAction(Consumer<AbstractContainerScreen<?>> arg) {
         this.onAfterMouseAction = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> handleDelayedNarration(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> handleDelayedNarration(Consumer<AbstractContainerScreen<?>> arg) {
         this.handleDelayedNarration = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onHandleDelayedNarration(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onHandleDelayedNarration(Consumer<AbstractContainerScreen<?>> arg) {
         this.onHandleDelayedNarration = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> triggerImmediateNarration(Consumer<ContextUtils.NarrationContext> arg) {
+    public AbstractContainerBuilder<T> triggerImmediateNarration(Consumer<ContextUtils.NarrationContext> arg) {
         this.triggerImmediateNarration = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onTriggerImmediateNarration(Consumer<ContextUtils.NarrationContext> arg) {
+    public AbstractContainerBuilder<T> onTriggerImmediateNarration(Consumer<ContextUtils.NarrationContext> arg) {
         this.onTriggerImmediateNarration = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> updateNarrationState(Consumer<ContextUtils.NarrationStateContext> arg) {
+    public AbstractContainerBuilder<T> updateNarrationState(Consumer<ContextUtils.NarrationStateContext> arg) {
         this.updateNarrationState = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onUpdateNarrationState(Consumer<ContextUtils.NarrationStateContext> arg) {
+    public AbstractContainerBuilder<T> onUpdateNarrationState(Consumer<ContextUtils.NarrationStateContext> arg) {
         this.onUpdateNarrationState = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> updateNarratedWidget(Consumer<ContextUtils.NarrationStateContext> arg) {
+    public AbstractContainerBuilder<T> updateNarratedWidget(Consumer<ContextUtils.NarrationStateContext> arg) {
         this.updateNarratedWidget = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onUpdateNarratedWidget(Consumer<ContextUtils.NarrationStateContext> arg) {
+    public AbstractContainerBuilder<T> onUpdateNarratedWidget(Consumer<ContextUtils.NarrationStateContext> arg) {
         this.onUpdateNarratedWidget = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> narrationEnabled(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> narrationEnabled(Consumer<AbstractContainerScreen<?>> arg) {
         this.narrationEnabled = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onNarrationEnabled(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onNarrationEnabled(Consumer<AbstractContainerScreen<?>> arg) {
         this.onNarrationEnabled = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> magicalSpecialHackyFocus(Consumer<ContextUtils.RemoveWidgetContext> arg) {
+    public AbstractContainerBuilder<T> magicalSpecialHackyFocus(Consumer<ContextUtils.RemoveWidgetContext> arg) {
         this.magicalSpecialHackyFocus = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onMagicalSpecialHackyFocus(Consumer<ContextUtils.RemoveWidgetContext> arg) {
+    public AbstractContainerBuilder<T> onMagicalSpecialHackyFocus(Consumer<ContextUtils.RemoveWidgetContext> arg) {
         this.onMagicalSpecialHackyFocus = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> mouseMoved(Consumer<ContextUtils.MouseMoveContext> arg) {
+    public AbstractContainerBuilder<T> mouseMoved(Consumer<ContextUtils.MouseMoveContext> arg) {
         this.mouseMoved = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onMouseMoved(Consumer<ContextUtils.MouseMoveContext> arg) {
+    public AbstractContainerBuilder<T> onMouseMoved(Consumer<ContextUtils.MouseMoveContext> arg) {
         this.onMouseMoved = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setFocused(Consumer<ContextUtils.RemoveWidgetContext> arg) {
+    public AbstractContainerBuilder<T> setFocused(Consumer<ContextUtils.RemoveWidgetContext> arg) {
         this.setFocused = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onSetFocused(Consumer<ContextUtils.RemoveWidgetContext> arg) {
+    public AbstractContainerBuilder<T> onSetFocused(Consumer<ContextUtils.RemoveWidgetContext> arg) {
         this.onSetFocused = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setTooltipForNextRenderPass(Consumer<ContextUtils.TooltipRenderPassContext> arg) {
+    public AbstractContainerBuilder<T> setTooltipForNextRenderPass(Consumer<ContextUtils.TooltipRenderPassContext> arg) {
         this.setTooltipForNextRenderPass = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onSetTooltipForNextRenderPass(Consumer<ContextUtils.TooltipRenderPassContext> arg) {
+    public AbstractContainerBuilder<T> onSetTooltipForNextRenderPass(Consumer<ContextUtils.TooltipRenderPassContext> arg) {
         this.onSetTooltipForNextRenderPass = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> afterKeyboardAction(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> afterKeyboardAction(Consumer<AbstractContainerScreen<?>> arg) {
         this.afterKeyboardAction = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onAfterKeyboardAction(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onAfterKeyboardAction(Consumer<AbstractContainerScreen<?>> arg) {
         this.onAfterKeyboardAction = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> afterMouseMove(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> afterMouseMove(Consumer<AbstractContainerScreen<?>> arg) {
         this.afterMouseMove = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onAfterMouseMove(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onAfterMouseMove(Consumer<AbstractContainerScreen<?>> arg) {
         this.onAfterMouseMove = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> repositionElements(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> repositionElements(Consumer<AbstractContainerScreen<?>> arg) {
         this.repositionElements = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onRepositionElements(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onRepositionElements(Consumer<AbstractContainerScreen<?>> arg) {
         this.onRepositionElements = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> renderDirtBackground(Consumer<ContextUtils.RenderBackgroundContext> arg) {
+    public AbstractContainerBuilder<T> renderDirtBackground(Consumer<ContextUtils.RenderBackgroundContext> arg) {
         this.renderDirtBackground = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onRenderDirtBackground(Consumer<ContextUtils.RenderBackgroundContext> arg) {
+    public AbstractContainerBuilder<T> onRenderDirtBackground(Consumer<ContextUtils.RenderBackgroundContext> arg) {
         this.onRenderDirtBackground = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onRenderBackground(Consumer<ContextUtils.RenderBackgroundContext> arg) {
+    public AbstractContainerBuilder<T> onRenderBackground(Consumer<ContextUtils.RenderBackgroundContext> arg) {
         this.onRenderBackground = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onClose(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onClose(Consumer<AbstractContainerScreen<?>> arg) {
         this.onClose = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> close(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> close(Consumer<AbstractContainerScreen<?>> arg) {
         this.close = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onContainerTick(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onContainerTick(Consumer<AbstractContainerScreen<?>> arg) {
         this.onContainerTick = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> containerTick(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> containerTick(Consumer<AbstractContainerScreen<?>> arg) {
         this.containerTick = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onSlotClicked(Consumer<ContextUtils.SlotClickedContext> arg) {
+    public AbstractContainerBuilder<T> onSlotClicked(Consumer<ContextUtils.SlotClickedContext> arg) {
         this.onSlotClicked = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> slotClicked(Consumer<ContextUtils.SlotClickedContext> arg) {
+    public AbstractContainerBuilder<T> slotClicked(Consumer<ContextUtils.SlotClickedContext> arg) {
         this.slotClicked = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> renderTooltip(Consumer<ContextUtils.TooltipRenderContext> arg) {
+    public AbstractContainerBuilder<T> renderTooltip(Consumer<ContextUtils.TooltipRenderContext> arg) {
         this.renderTooltip = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onRenderTooltip(Consumer<ContextUtils.TooltipRenderContext> arg) {
+    public AbstractContainerBuilder<T> onRenderTooltip(Consumer<ContextUtils.TooltipRenderContext> arg) {
         this.onRenderTooltip = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onRenderLabels(Consumer<ContextUtils.LabelRenderContext> arg) {
+    public AbstractContainerBuilder<T> onRenderLabels(Consumer<ContextUtils.LabelRenderContext> arg) {
         this.onRenderLabels = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> renderLabels(Consumer<ContextUtils.LabelRenderContext> arg) {
+    public AbstractContainerBuilder<T> renderLabels(Consumer<ContextUtils.LabelRenderContext> arg) {
         this.renderLabels = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onClearDraggingState(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> onClearDraggingState(Consumer<AbstractContainerScreen<?>> arg) {
         this.onClearDraggingState = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> clearDraggingState(Consumer<AbstractContainerScreen<?>> arg) {
+    public AbstractContainerBuilder<T> clearDraggingState(Consumer<AbstractContainerScreen<?>> arg) {
         this.clearDraggingState = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> render(Consumer<ContextUtils.ScreenRenderContext> arg) {
+    public AbstractContainerBuilder<T> render(Consumer<ContextUtils.ScreenRenderContext> arg) {
         this.render = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onRender(Consumer<ContextUtils.ScreenRenderContext> arg) {
+    public AbstractContainerBuilder<T> onRender(Consumer<ContextUtils.ScreenRenderContext> arg) {
         this.onRender = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> getCarried(Function<T, Object> arg) {
+    public AbstractContainerBuilder<T> getCarried(Function<T, Object> arg) {
         this.getCarried = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setCarried(Consumer<ContextUtils.MenuItemStackContext> arg) {
+    public AbstractContainerBuilder<T> setCarried(Consumer<ContextUtils.MenuItemStackContext> arg) {
         this.setCarried = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> canDragTo(Function<ContextUtils.MenuSlotContext, Object> arg) {
+    public AbstractContainerBuilder<T> canDragTo(Function<ContextUtils.MenuSlotContext, Object> arg) {
         this.canDragTo = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> moveItemStackTo(Function<ContextUtils.TransferStackContext, Object> arg) {
+    public AbstractContainerBuilder<T> moveItemStackTo(Function<ContextUtils.TransferStackContext, Object> arg) {
         this.moveItemStackTo = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onSetData(Consumer<ContextUtils.IndexDataContext> arg) {
+    public AbstractContainerBuilder<T> onSetData(Consumer<ContextUtils.IndexDataContext> arg) {
         this.onSetData = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onInitializeContents(Consumer<ContextUtils.ContainerUpdateContext> arg) {
+    public AbstractContainerBuilder<T> onInitializeContents(Consumer<ContextUtils.ContainerUpdateContext> arg) {
         this.onInitializeContents = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setMenuSlotChanged(Consumer<ContextUtils.ContainerMenuContext> arg) {
+    public AbstractContainerBuilder<T> setMenuSlotChanged(Consumer<ContextUtils.ContainerMenuContext> arg) {
         this.setMenuSlotChanged = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onMenuSlotChanged(Consumer<ContextUtils.ContainerMenuContext> arg) {
+    public AbstractContainerBuilder<T> onMenuSlotChanged(Consumer<ContextUtils.ContainerMenuContext> arg) {
         this.onMenuSlotChanged = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setItemRemoved(Consumer<ContextUtils.PlayerMenuContext> arg) {
+    public AbstractContainerBuilder<T> setItemRemoved(Consumer<ContextUtils.PlayerMenuContext> arg) {
         this.setItemRemoved = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onItemRemoved(Consumer<ContextUtils.PlayerMenuContext> arg) {
+    public AbstractContainerBuilder<T> onItemRemoved(Consumer<ContextUtils.PlayerMenuContext> arg) {
         this.onItemRemoved = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setCanTakeItemForPickAll(Function<ContextUtils.ItemSlotContext, Object> arg) {
+    public AbstractContainerBuilder<T> setCanTakeItemForPickAll(Function<ContextUtils.ItemSlotContext, Object> arg) {
         this.setCanTakeItemForPickAll = arg;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onClicked(Consumer<ContextUtils.SlotClickContext> consumer) {
+    public AbstractContainerBuilder<T> onClicked(Consumer<ContextUtils.SlotClickContext> consumer) {
         this.onClicked = consumer;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> clickMenuButton(Function<ContextUtils.PlayerIndexContext, Object> consumer) {
+    public AbstractContainerBuilder<T> clickMenuButton(Function<ContextUtils.PlayerIndexContext, Object> consumer) {
         this.clickMenuButton = consumer;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> renderBg(Consumer<ContextUtils.ScreenRenderContext> consumer) {
+    public AbstractContainerBuilder<T> renderBg(Consumer<ContextUtils.ScreenRenderContext> consumer) {
         this.renderBg = consumer;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onScreenSlotChanged(Consumer<ContextUtils.MenuItemContext> consumer) {
+    public AbstractContainerBuilder<T> onScreenSlotChanged(Consumer<ContextUtils.MenuItemContext> consumer) {
         this.onScreenSlotChanged = consumer;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onDataChanged(Consumer<ContextUtils.DataChangedContext> consumer) {
+    public AbstractContainerBuilder<T> onDataChanged(Consumer<ContextUtils.DataChangedContext> consumer) {
         this.onDataChanged = consumer;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onScreenInit(Consumer<ContextUtils.ScreenBuilderContext> init) {
+    public AbstractContainerBuilder<T> onScreenInit(Consumer<ContextUtils.ScreenBuilderContext> init) {
         this.onScreenInit = init;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> onMenuInit(Consumer<ContextUtils.MenuBuilderContext<T>> init) {
+    public AbstractContainerBuilder<T> onMenuInit(Consumer<ContextUtils.MenuBuilderContext<T>> init) {
         this.onMenuInit = init;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> addDataSlot(DataSlot slot) {
+    public AbstractContainerBuilder<T> addDataSlot(DataSlot slot) {
         this.dataSlotList.add(slot);
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> addContainerData(ContainerData slot) {
+    public AbstractContainerBuilder<T> addContainerData(ContainerData slot) {
         this.containerSlotList.add(slot);
         return this;
     }
@@ -650,12 +650,12 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         return container;
     }
 
-    public AbstractMenuContainerBuilder<T> setContainer() {
+    public AbstractContainerBuilder<T> setContainer() {
         this.container = new SimpleContainer();
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setContainer(int pSize) {
+    public AbstractContainerBuilder<T> setContainer(int pSize) {
         this.container = new SimpleContainer(pSize);
         return this;
     }
@@ -665,7 +665,7 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         return this;
     }*/
 
-    public AbstractMenuContainerBuilder<T> addSlot(int pSlot, int pX, int pY) {
+    public AbstractContainerBuilder<T> addSlot(int pSlot, int pX, int pY) {
         if (this.container == null) {
             this.setContainer();
         }
@@ -673,22 +673,22 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> addSlot(Slot slot) {
+    public AbstractContainerBuilder<T> addSlot(Slot slot) {
         this.slotList.add(slot);
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> isValidSlotIndex(Function<ContextUtils.IndexContext, Object> function) {
+    public AbstractContainerBuilder<T> isValidSlotIndex(Function<ContextUtils.IndexContext, Object> function) {
         this.isValidSlotIndex = function;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setStillValid(Function<ContextUtils.PlayerMenuContext, Object> function) {
+    public AbstractContainerBuilder<T> setStillValid(Function<ContextUtils.PlayerMenuContext, Object> function) {
         this.setStillValid = function;
         return this;
     }
 
-    public AbstractMenuContainerBuilder<T> setQuickMoveStack(Function<ContextUtils.PlayerIndexContext, Object> stack) {
+    public AbstractContainerBuilder<T> setQuickMoveStack(Function<ContextUtils.PlayerIndexContext, Object> stack) {
         this.setQuickMoveStack = stack;
         return this;
     }
@@ -698,12 +698,12 @@ public abstract class AbstractMenuContainerBuilder<T extends AbstractContainerMe
         return RegistryInfo.MENU;
     }
 
-    public AbstractContainerMenu getMenu() {
+    public T getMenu() {
         return menu;
     }
 
-    public void setMenu(AbstractContainerMenu menu) {
-        this.menu = menu;
+    @Override
+    public MenuType<T> createObject() {
+        return new AbstractMenuTypeJS<>(this).get();
     }
-
 }

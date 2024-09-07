@@ -1,6 +1,7 @@
-package net.liopyu.menujs.client;
+package net.liopyu.menujs.client.screens.menujs;
 
-import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
+import net.liopyu.menujs.builders.AbstractContainerBuilder;
+import net.liopyu.menujs.client.screens.IScreenContainerJS;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -42,87 +43,27 @@ import static net.liopyu.menujs.util.MenuJSHelperClass.convertObjectToDesired;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @OnlyIn(Dist.CLIENT)
-public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements ContainerListener {
-    private final AbstractMenuContainerBuilder<T> builder;
+public class AbstractContainerScreenJS<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements ContainerListener, IScreenContainerJS {
+    private final AbstractContainerBuilder<T> builder;
     private final Inventory playerInventory;
 
-    public AbstractContainerScreenJS(AbstractMenuContainerBuilder<T> builder, T pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public AbstractContainerScreenJS(AbstractContainerBuilder<T> builder, T pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.builder = builder;
         this.playerInventory = pPlayerInventory;
     }
 
-    public void setImageWidth(int imageWidth) {
-        this.imageWidth = imageWidth;
-    }
-
-    public void setImageHeight(int imageHeight) {
-        this.imageHeight = imageHeight;
-    }
-
-    public int getImageWidth() {
-        return imageWidth;
-    }
-
-    public int getImageHeight() {
-        return imageHeight;
-    }
-
-    public void setTopPos(int topPos) {
-        this.topPos = topPos;
-    }
-
-    public int getTopPos() {
-        return topPos;
-    }
-
-    public void setLeftPos(int leftPos) {
-        this.leftPos = leftPos;
-    }
-
-    public int getLeftPos() {
-        return leftPos;
-    }
-
-
-    public void setInventoryLabelY(int i) {
-        inventoryLabelY = i;
-    }
-
-    public void setInventoryLabelX(int i) {
-        inventoryLabelX = i;
-    }
-
-    public int getInventoryLabelY() {
-        return inventoryLabelY;
-    }
-
-    public int getInventoryLabelX() {
-        return inventoryLabelX;
-    }
-
-    public void setTitleLabelY(int i) {
-        titleLabelY = i;
-    }
-
-    public void setTitleLabelX(int i) {
-        titleLabelX = i;
-    }
-
-    public int getTitleLabelY() {
-        return titleLabelY;
-    }
-
-    public int getTitleLabelX() {
-        return titleLabelX;
-    }
-
-    public AbstractMenuContainerBuilder<T> getBuilder() {
+    public AbstractContainerBuilder<T> getBuilder() {
         return builder;
     }
 
     public Inventory getPlayerInventory() {
         return playerInventory;
+    }
+
+    @Override
+    public AbstractContainerScreen<?> getScreen() {
+        return this;
     }
 
     protected void init() {

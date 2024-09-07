@@ -1,29 +1,22 @@
 package net.liopyu.menujs.client.widgets;
 
-import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
-import net.liopyu.menujs.builders.widgets.AbstractWidgetBuilder;
+import net.liopyu.menujs.builders.AbstractContainerBuilder;
+import net.liopyu.menujs.builders.widget.AbstractWidgetBuilder;
 import net.liopyu.menujs.util.ContextUtils;
 import net.liopyu.menujs.util.MenuJSHelperClass;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.ComponentPath;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
-import net.minecraft.client.gui.navigation.ScreenRectangle;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.Consumer;
 
 import static net.liopyu.menujs.util.MenuJSHelperClass.consumerCallback;
 import static net.liopyu.menujs.util.MenuJSHelperClass.convertObjectToDesired;
@@ -34,9 +27,9 @@ import static net.liopyu.menujs.util.MenuJSHelperClass.convertObjectToDesired;
 public class AbstractWidgetJS extends AbstractWidget {
 
     private final AbstractWidgetBuilder builder;
-    private final AbstractMenuContainerBuilder<?> menuBuilder;
+    private final AbstractContainerBuilder<?> menuBuilder;
 
-    public AbstractWidgetJS(AbstractWidgetBuilder builder, AbstractMenuContainerBuilder<?> menuBuilder, int x, int y, int width, int height, Component message) {
+    public AbstractWidgetJS(AbstractWidgetBuilder builder, AbstractContainerBuilder<?> menuBuilder, int x, int y, int width, int height, Component message) {
         super(x, y, width, height, message);
         this.builder = builder;
         this.menuBuilder = menuBuilder;
@@ -60,7 +53,7 @@ public class AbstractWidgetJS extends AbstractWidget {
             final ContextUtils.ScreenRenderContextW context = new ContextUtils.ScreenRenderContextW(this, guiGraphics, v, i, i1);
             consumerCallback(builder.renderWidget, context, "Error in " + menuName() + "builder for field: renderWidget.");
         }
-        
+
     }
 
 

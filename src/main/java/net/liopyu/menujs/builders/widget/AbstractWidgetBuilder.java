@@ -1,10 +1,9 @@
-package net.liopyu.menujs.builders.widgets;
+package net.liopyu.menujs.builders.widget;
 
 import dev.latvian.mods.rhino.util.HideFromJS;
-import net.liopyu.menujs.builders.AbstractMenuContainerBuilder;
+import net.liopyu.menujs.builders.AbstractContainerBuilder;
 import net.liopyu.menujs.client.widgets.AbstractWidgetJS;
 import net.liopyu.menujs.util.ContextUtils;
-import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
 
@@ -12,7 +11,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class AbstractWidgetBuilder {
-    private final AbstractMenuContainerBuilder<?> menuBuilder;
+    private final AbstractContainerBuilder<?> menuBuilder;
     public transient Function<ContextUtils.IsMouseOverContextW, Object> isMouseOver;
     public transient Function<ContextUtils.CharTypedContextW, Object> charTyped;
     public transient Function<ContextUtils.NextFocusPathContextW, Object> nextFocusPath;
@@ -45,7 +44,7 @@ public class AbstractWidgetBuilder {
     public transient Consumer<ContextUtils.NarrationStateContextW> updateWidgetNarration;
     public transient Consumer<ContextUtils.NarrationStateContextW> onUpdateWidgetNarration;
 
-    public AbstractWidgetBuilder(AbstractMenuContainerBuilder<?> builder) {
+    public AbstractWidgetBuilder(AbstractContainerBuilder<?> builder) {
         this.menuBuilder = builder;
     }
 
@@ -209,7 +208,7 @@ public class AbstractWidgetBuilder {
         return new AbstractWidgetJS(this, menuBuilder, x, y, width, height, message);
     }
 
-    public AbstractMenuContainerBuilder<?> getMenuBuilder() {
+    public AbstractContainerBuilder<?> getMenuBuilder() {
         return menuBuilder;
     }
 }
